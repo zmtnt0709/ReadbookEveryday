@@ -302,16 +302,18 @@ public class BookDetailActivity extends AppCompatActivity {
     }
 
     private class DeleteConfirm extends ConfirmPopupWindow{
-        private PageRange hasReadPageRange;
+        private PageRange deleteReadPageRange;
 
-        public DeleteConfirm(Context context, String hintText, String positiveButtonText, String negativeButtonText, PageRange hasReadPageRange) {
+        public DeleteConfirm(Context context, String hintText, String positiveButtonText, String negativeButtonText, PageRange deleteReadPageRange) {
             super(context, hintText, positiveButtonText, negativeButtonText);
-            this.hasReadPageRange = hasReadPageRange;
+            this.deleteReadPageRange = deleteReadPageRange;
         }
 
         @Override
         protected void OnPositiveButtonClick() {
-
+            bookUtil.deleteHasReadPageRange(deleteReadPageRange,bookModule);
+            hasReadPageRangeAdapter.notifyDataSetChanged();
+            shouldReadPageRangeAdapter.notifyDataSetChanged();
         }
 
         @Override

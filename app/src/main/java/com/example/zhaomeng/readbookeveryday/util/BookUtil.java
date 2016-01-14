@@ -135,7 +135,7 @@ public class BookUtil {
     public void addHasReadPageRange(BookModule bookModule, int pageStartInt, int pageStopInt, DatePicker datePicker) {
         //获取设置的阅读时间
         Calendar calendar = Calendar.getInstance();
-        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),16,0,0);
+        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), 16, 0, 0);
         //更新bookModule
         PageRange hasReadPageRange = new PageRange(pageStartInt, pageStopInt, calendar.getTimeInMillis());
         addPageRangeList(bookModule.getHasReadPageList(), hasReadPageRange);
@@ -183,36 +183,91 @@ public class BookUtil {
         List<ReadProgressToShow> readProgressToShowList = new ArrayList<>();
 
         boolean isReadDateExist;
-        for(ReadProgressDto readProgressDto:readProgressDtoList) {
+        for (ReadProgressDto readProgressDto : readProgressDtoList) {
             isReadDateExist = false;
-            for(ReadProgressToShow readProgressToShow:readProgressToShowList){
-                if(readProgressDto.getCreateDate() == readProgressToShow.getReadDate()){
+            for (ReadProgressToShow readProgressToShow : readProgressToShowList) {
+                if (readProgressDto.getCreateDate() == readProgressToShow.getReadDate()) {
                     isReadDateExist = true;
                     readProgressToShow.addReadProgress(readProgressDto);
                     break;
                 }
             }
 
-            if(!isReadDateExist){
+            if (!isReadDateExist) {
                 ReadProgressToShow readProgressToShow = new ReadProgressToShow(readProgressDto);
                 readProgressToShowList.add(readProgressToShow);
             }
         }
         SortReadProgress sortReadProgress = new SortReadProgress();
-        Collections.sort(readProgressToShowList,sortReadProgress);
+        Collections.sort(readProgressToShowList, sortReadProgress);
 
         return readProgressToShowList;
     }
 
-    class SortReadProgress implements Comparator<ReadProgressToShow>{
+    public void deleteHasReadPageRange(PageRange deleteReadPageRange, BookModule bookModule) {
+        //删除已读列表
+        bookModule.getHasReadPageList().remove(deleteReadPageRange);
+        //恢复未读列表
+        resetShowReadPageRangeList(deleteReadPageRange, bookModule);
+        //删除读书进度表
+
+        //更新数据库
+        bookModule.notifyAddedHasReadPageRange();
+        BookDao bookDao = getBookDao();
+        try {
+            bookDao.createOrUpdate(bookModule.getBookDto());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetShowReadPageRangeList(PageRange deleteReadPageRange, BookModule bookModule) {
+        //取出删除区间所在的总区间
+        PageRange totalPageRange = null;
+        for (PageRange pageRange : bookModule.getTotalPageRangeList()) {
+            if (pageRange.getStartPage() <= deleteReadPageRange.getStartPage() && pageRange.getStopPage() >= deleteReadPageRange.getStopPage()) {
+                totalPageRange = pageRange;
+                break;
+            }
+        }
+        if (totalPageRange == null) return;
+        //取出在总区间内的所有未读区间
+        int i = 0;
+        List<PageRange> shouldReadPageList = bookModule.getShouldReadPageList();
+        while (shouldReadPageList.get(i).getStopPage() < deleteReadPageRange.getStartPage() && i < shouldReadPageList.size()) {
+            i++;
+        }
+        if (i < shouldReadPageList.size()) {
+            PageRange nextPageRange = shouldReadPageList.get(i);
+            if (nextPageRange.getStartPage() == deleteReadPageRange.getStopPage() + 1
+                    && nextPageRange.getStartPage() >= totalPageRange.getStartPage()
+                    && nextPageRange.getStopPage() <= totalPageRange.getStopPage()) {
+                deleteReadPageRange.setStopPage(nextPageRange.getStopPage());
+                shouldReadPageList.remove(i);
+            }
+        }
+        if (i - 1 >= 0) {
+            PageRange prePageRange = shouldReadPageList.get(i - 1);
+            if (prePageRange.getStopPage() == deleteReadPageRange.getStartPage() - 1
+                    && prePageRange.getStartPage() >= totalPageRange.getStartPage()
+                    && prePageRange.getStopPage() <= totalPageRange.getStopPage()) {
+                deleteReadPageRange.setStartPage(prePageRange.getStartPage());
+                shouldReadPageList.remove(i - 1);
+                i--;
+            }
+        }
+        shouldReadPageList.add(i, deleteReadPageRange);
+    }
+
+    class SortReadProgress implements Comparator<ReadProgressToShow> {
 
         @Override
         public int compare(ReadProgressToShow left, ReadProgressToShow right) {
-            if(left.getReadDate() < right.getReadDate()){
+            if (left.getReadDate() < right.getReadDate()) {
                 return -1;
-            }else if(left.getReadDate()>right.getReadDate()){
+            } else if (left.getReadDate() > right.getReadDate()) {
                 return 1;
-            }else {
+            } else {
                 return 0;
             }
         }
