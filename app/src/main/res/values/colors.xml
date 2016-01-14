@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="toolBar">#f2514e</color>
+    <color name="colorPrimaryDark">#f2514e</color>
+    <color name="colorAccent">#f2514e</color>
+
+    <color name="textColorWhite">#ffffff</color>
+    <color name="textColorDeepGray">#2c2c2c</color>
+    <color name="textColorLightGray">#909090</color>
+
+    <color name="translucence_background">#e0000000</color>
+    <color name="lightGray_background">#d0d0d0</color>
+    <color name="write_background">#ffffff</color>
+
+    <color name="transparency_background">#00000000</color>
+
+
+</resources>

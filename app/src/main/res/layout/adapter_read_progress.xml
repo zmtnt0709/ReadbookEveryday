@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/read_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="2015-12-15"
+            android:textSize="17sp" />
+
+        <ProgressBar
+            android:id="@+id/read_progress"
+            style="@style/readProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/read_date"
+            android:max="100"
+            android:progress="30"
+            android:secondaryProgress="0" />
+
+
+        <TextView
+            android:id="@+id/read_pages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/read_progress"
+            android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
+            android:text="10"
+            android:textColor="@color/textColorWhite"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

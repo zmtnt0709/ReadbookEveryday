@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/write_background">
+
+        <TextView
+            android:id="@+id/page_range_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="设置起止页"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:id="@+id/page_layout"
+            android:layout_below="@id/page_range_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/startPage"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/popup_window_start_page"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/popup_window_page_title"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/popup_window_to"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/stopPage"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/popup_window_stop_page"
+                android:inputType="number"
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/popup_window_page_title"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/page_layout"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:id="@+id/cancel_action"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/lightGray_background"
+                android:text="@string/popup_window_cancel"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/add_action"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/toolBar"
+                android:text="@string/popup_window_add"
+                android:textColor="@color/textColorWhite"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@color/write_background">
+
+        <TextView
+            android:id="@+id/read_time_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/page_layout"
+            android:gravity="center_horizontal"
+            android:background="@color/toolBar"
+            android:textColor="@color/textColorWhite"
+            android:padding="10dp"
+            android:text="设置阅读时间"
+            android:textSize="17sp" />
+
+        <DatePicker
+            android:id="@+id/read_pages_date"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_below="@id/read_time_title"
+            android:layout_centerHorizontal="true"
+            android:calendarViewShown="false" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/read_pages_date"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:id="@+id/cancel_action"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/lightGray_background"
+                android:text="@string/popup_window_cancel"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/add_action"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:background="@color/toolBar"
+                android:text="@string/popup_window_add"
+                android:textColor="@color/textColorWhite"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

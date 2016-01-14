@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/toolBar"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已累计阅读"
+                android:textColor="@color/lightGray_background"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/has_read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100页"
+                android:textColor="@color/textColorWhite"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/lightGray_background" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="平均每天阅读"
+                android:textColor="@color/lightGray_background"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/average_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10页"
+                android:textColor="@color/textColorWhite"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/read_progress_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@null"/>
+
+</LinearLayout>

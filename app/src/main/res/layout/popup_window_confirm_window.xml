@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/translucence_background">
+
+    <RelativeLayout
+        android:layout_width="280dip"
+        android:layout_height="166.67dip"
+        android:layout_centerInParent="true"
+        android:background="@color/write_background">
+
+        <TextView
+            android:id="@+id/message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="40dp"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+
+            <Button
+                android:id="@+id/cancel_action"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/lightGray_background"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/confirm_action"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/toolBar"
+                android:textColor="@color/textColorWhite"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
