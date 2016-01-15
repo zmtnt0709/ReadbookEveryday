@@ -2,6 +2,7 @@ package com.example.zhaomeng.readbookeveryday.sqlite.dao;
 
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.ReadProgressDto;
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
 
@@ -31,5 +32,15 @@ public class ReadProgressDao extends BaseDaoImpl<ReadProgressDto,String> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void deleteProgressById(int deleteProgressId) {
+        DeleteBuilder<ReadProgressDto,String> deleteBuilder = deleteBuilder();
+        try{
+            deleteBuilder.where().eq("id",deleteProgressId);
+            delete(deleteBuilder.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

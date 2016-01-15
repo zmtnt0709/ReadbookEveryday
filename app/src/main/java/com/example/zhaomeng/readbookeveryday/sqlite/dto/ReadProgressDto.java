@@ -73,20 +73,4 @@ public class ReadProgressDto {
     public void setCreateDate(int createDate) {
         this.createDate = createDate;
     }
-
-    public long getCreateTime() {
-        return dateToTimeMill(createDate);
-    }
-
-    public void setCreateDateWithTimeMill(long createTime) {
-        this.createDate = timeMillToDate(createTime);
-    }
-
-    public int timeMillToDate(long timeMill) {
-        return (int) (timeMill / 1000 / 3600 / 24);
-    }
-
-    public long dateToTimeMill(int date) {
-        return (long) date * 24 * 3600 * 1000;
-    }
 }

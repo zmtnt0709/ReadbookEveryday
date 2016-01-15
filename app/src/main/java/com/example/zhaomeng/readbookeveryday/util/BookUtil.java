@@ -84,12 +84,16 @@ public class BookUtil {
         BookDao dao = getBookDao();
         if (dao == null) return null;
 
+        List<BookDto> bookList = null;
         try {
-            return dao.queryForAll();
+            bookList = dao.queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        if(bookList == null) return null;
+
+        Collections.sort(bookList,new SortBookList());
+        return bookList;
     }
 
     public boolean addPageRangeList(List<PageRange> pageRangeList, PageRange pageRange) {
@@ -137,7 +141,7 @@ public class BookUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), 16, 0, 0);
         //更新bookModule
-        PageRange hasReadPageRange = new PageRange(pageStartInt, pageStopInt, calendar.getTimeInMillis());
+        PageRange hasReadPageRange = new PageRange(pageStartInt, pageStopInt, timeMillToDate(calendar.getTimeInMillis()));
         addPageRangeList(bookModule.getHasReadPageList(), hasReadPageRange);
         removeFromPageRangeList(bookModule.getShouldReadPageList(), hasReadPageRange);
         bookModule.notifyAddedHasReadPageRange();
@@ -167,16 +171,16 @@ public class BookUtil {
         if (pageRangeTemp == null) return false;
 
         if (pageRangeTemp.getStopPage() > pageRange.getStopPage()) {
-            pageRangeList.add(i, new PageRange(pageRange.getStopPage() + 1, pageRangeTemp.getStopPage()));
+            pageRangeList.add(i, new PageRange(pageRange.getStopPage() + 1, pageRangeTemp.getStopPage(), timeMillToDate(System.currentTimeMillis())));
         }
         if (pageRangeTemp.getStartPage() < pageRange.getStartPage()) {
-            pageRangeList.add(i, new PageRange(pageRangeTemp.getStartPage(), pageRange.getStartPage() - 1));
+            pageRangeList.add(i, new PageRange(pageRangeTemp.getStartPage(), pageRange.getStartPage() - 1, timeMillToDate(System.currentTimeMillis())));
         }
         return true;
     }
 
 
-    public List<ReadProgressToShow> getAllReadProgress() {
+    public List<ReadProgressToShow> getAllReadProgressToShow() {
         ReadProgressDao readProgressDao = getReadProgressDao();
         List<ReadProgressDto> readProgressDtoList = readProgressDao.getAllReadProgress();
 
@@ -209,8 +213,6 @@ public class BookUtil {
         bookModule.getHasReadPageList().remove(deleteReadPageRange);
         //恢复未读列表
         resetShowReadPageRangeList(deleteReadPageRange, bookModule);
-        //删除读书进度表
-
         //更新数据库
         bookModule.notifyAddedHasReadPageRange();
         BookDao bookDao = getBookDao();
@@ -219,6 +221,8 @@ public class BookUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //删除读书进度表
+        deleteReadProgress(deleteReadPageRange, bookModule);
     }
 
     public void resetShowReadPageRangeList(PageRange deleteReadPageRange, BookModule bookModule) {
@@ -234,7 +238,7 @@ public class BookUtil {
         //取出在总区间内的所有未读区间
         int i = 0;
         List<PageRange> shouldReadPageList = bookModule.getShouldReadPageList();
-        while (shouldReadPageList.get(i).getStopPage() < deleteReadPageRange.getStartPage() && i < shouldReadPageList.size()) {
+        while (i < shouldReadPageList.size() &&  shouldReadPageList.get(i).getStopPage() < deleteReadPageRange.getStartPage()  ) {
             i++;
         }
         if (i < shouldReadPageList.size()) {
@@ -259,14 +263,53 @@ public class BookUtil {
         shouldReadPageList.add(i, deleteReadPageRange);
     }
 
+    private void deleteReadProgress(PageRange deleteReadPageRange, BookModule bookModule) {
+        ReadProgressDao readProgressDao = getReadProgressDao();
+        List<ReadProgressDto> readProgressDtoList = readProgressDao.getAllReadProgress();
+        int deleteProgressId = -1;
+        for (ReadProgressDto readProgressDto : readProgressDtoList) {
+            if (readProgressDto.getCreateDate() == deleteReadPageRange.getCreateDate()
+                    && readProgressDto.getBookId() == bookModule.getBookDto().getId()
+                    && readProgressDto.getReadPageNum() == deleteReadPageRange.getTotalPage()) {
+                deleteProgressId = readProgressDto.getId();
+                break;
+            }
+        }
+        if (deleteProgressId == -1) return;
+
+        readProgressDao.deleteProgressById(deleteProgressId);
+    }
+
+    public int timeMillToDate(long timeMill) {
+        return (int) (timeMill / 1000 / 3600 / 24);
+    }
+
+    public long dateToTimeMill(int date) {
+        return (long) date * 24 * 3600 * 1000;
+    }
+
+    class SortBookList implements Comparator<BookDto> {
+
+        @Override
+        public int compare(BookDto left, BookDto right) {
+            if (left.getUpdateTime() < right.getUpdateTime()) {
+                return 1;
+            } else if (left.getUpdateTime() > right.getUpdateTime()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
     class SortReadProgress implements Comparator<ReadProgressToShow> {
 
         @Override
         public int compare(ReadProgressToShow left, ReadProgressToShow right) {
             if (left.getReadDate() < right.getReadDate()) {
-                return -1;
-            } else if (left.getReadDate() > right.getReadDate()) {
                 return 1;
+            } else if (left.getReadDate() > right.getReadDate()) {
+                return -1;
             } else {
                 return 0;
             }

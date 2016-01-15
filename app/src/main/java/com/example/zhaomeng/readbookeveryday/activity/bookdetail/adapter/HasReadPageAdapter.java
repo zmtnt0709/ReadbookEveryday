@@ -23,13 +23,10 @@ public class HasReadPageAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Context context;
-    private BookModule bookModule;
-    private BookUtil bookUtil;
     private List<PageRange> hasReadPageRangeList;
 
     public HasReadPageAdapter(Context context, BookModule bookModule) {
         this.context = context;
-        this.bookModule = bookModule;
         hasReadPageRangeList = bookModule.getHasReadPageList();
         inflater = LayoutInflater.from(context);
     }
@@ -64,7 +61,7 @@ public class HasReadPageAdapter extends BaseAdapter {
         }
         holder.startPage.setText(hasReadPageRangeList.get(i).getStartPage() + context.getResources().getString(R.string.page_range_adapter_page_title));
         holder.stopPage.setText(hasReadPageRangeList.get(i).getStopPage() + context.getResources().getString(R.string.page_range_adapter_page_title));
-        holder.readDate.setText(getTimeString(hasReadPageRangeList.get(i).getCreateTime()));
+        holder.readDate.setText(getTimeString(BookUtil.getInstance(context).dateToTimeMill(hasReadPageRangeList.get(i).getCreateDate())));
         return view;
     }
 

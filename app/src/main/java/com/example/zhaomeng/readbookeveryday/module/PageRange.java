@@ -17,18 +17,11 @@ public class PageRange {
 
     }
 
-    public PageRange(int startPage, int stopPage) {
+    public PageRange(int startPage, int stopPage, int createDate) {
         this.startPage = startPage;
         this.stopPage = stopPage;
         this.totalPage = stopPage - startPage + 1;
-        this.createDate = timeMillToDate(System.currentTimeMillis());
-    }
-
-    public PageRange(int startPage, int stopPage, long createTime) {
-        this.startPage = startPage;
-        this.stopPage = stopPage;
-        this.totalPage = stopPage - startPage + 1;
-        this.createDate = timeMillToDate(createTime);
+        this.createDate = createDate;
     }
 
     public int getStartPage() {
@@ -63,14 +56,6 @@ public class PageRange {
         this.createDate = createDate;
     }
 
-    public long getCreateTime() {
-        return dateToTimeMill(createDate);
-    }
-
-    public void setCreateDateWithTimeMill(long createTime) {
-        this.createDate = timeMillToDate(createTime);
-    }
-
     public int compare(PageRange pageRange) {
         if (startPage > pageRange.stopPage) {
             return LARGER;
@@ -79,13 +64,5 @@ public class PageRange {
         } else {
             return ERROR;
         }
-    }
-
-    public int timeMillToDate(long timeMill) {
-        return (int) (timeMill / 1000 / 3600 / 24);
-    }
-
-    public long dateToTimeMill(int date) {
-        return (long) date * 24 * 3600 * 1000;
     }
 }

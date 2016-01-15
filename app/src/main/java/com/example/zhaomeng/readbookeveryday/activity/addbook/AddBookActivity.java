@@ -154,7 +154,7 @@ public class AddBookActivity extends AppCompatActivity {
 
                 int pageStartInt = Integer.parseInt(startPage.getText().toString());
                 int pageStopInt = Integer.parseInt(stopPage.getText().toString());
-                PageRange pageRange = new PageRange(pageStartInt, pageStopInt);
+                PageRange pageRange = new PageRange(pageStartInt, pageStopInt, bookUtil.timeMillToDate(System.currentTimeMillis()));
                 boolean addSuccess = bookUtil.addPageRangeList(pageRangeList, pageRange);
                 if (!addSuccess) {
                     Toast.makeText(AddBookActivity.this, "输入区间重叠", Toast.LENGTH_LONG).show();

@@ -54,7 +54,7 @@ public class ReadProgressFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected List<ReadProgressToShow> doInBackground(Void... voids) {
-            return bookUtil.getAllReadProgress();
+            return bookUtil.getAllReadProgressToShow();
         }
 
         @Override
