@@ -1,6 +1,7 @@
 package com.example.zhaomeng.readbookeveryday.activity.main.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.TextView;
 
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,6 +54,7 @@ public class BookListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.adapter_book_list, null);
             holder = new ViewHolder();
             holder.title = (TextView) view.findViewById(R.id.book_title);
+            holder.bookPoster = (SimpleDraweeView) view.findViewById(R.id.book_poster);
             holder.progress = (TextView) view.findViewById(R.id.progress);
             holder.createTime = (TextView) view.findViewById(R.id.create_time);
             holder.updateTime = (TextView) view.findViewById(R.id.last_update_time);
@@ -59,6 +64,12 @@ public class BookListAdapter extends BaseAdapter {
         }
         BookDto bookDto = bookDtoList.get(i);
         holder.title.setText(bookDto.getTitle());
+        if(bookDto.getImagePath() != null) {
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse("file://" + bookDto.getImagePath()))
+                    .build();
+            holder.bookPoster.setController(controller);
+        }
         holder.progress.setText(bookDto.getHasReadPageNum() + "/" + bookDto.getTotalPageNum());
         holder.createTime.setText(getTimeString(bookDto.getCreateTime()));
         holder.updateTime.setText(getTimeString(bookDto.getUpdateTime()) + context.getResources().getString(R.string.book_list_adapter_update_time_title));
@@ -72,6 +83,7 @@ public class BookListAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView title;
+        SimpleDraweeView bookPoster;
         TextView progress;
         TextView createTime;
         TextView updateTime;

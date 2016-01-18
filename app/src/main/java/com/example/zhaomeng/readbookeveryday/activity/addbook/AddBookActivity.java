@@ -1,5 +1,7 @@
 package com.example.zhaomeng.readbookeveryday.activity.addbook;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,12 @@ import android.widget.Toast;
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.module.PageRange;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
+import com.example.zhaomeng.readbookeveryday.util.FileUtil;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,21 +38,26 @@ import java.util.List;
  */
 public class AddBookActivity extends AppCompatActivity {
     private static final String TAG = AddBookActivity.class.getSimpleName();
+    private static final int REQUEST_CODE_PICK_IMAGE = 1;
 
     private Toolbar toolbar;
     private TextView addPagesTask;
     private EditText bookTitle;
     private TextView hasReadPage;
     private TextView totalPage;
-    private BookUtil bookUtil;
-    private List<PageRange> pageRangeList;
+    private SimpleDraweeView bookPoster;
     private ListView pageRangeListView;
     private PageRangeAdapter pageRangeAdapter;
+
+    private BookUtil bookUtil;
+    private List<PageRange> pageRangeList;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        Fresco.initialize(this);
         initData();
         initView();
         initClickListener();
@@ -53,11 +66,11 @@ public class AddBookActivity extends AppCompatActivity {
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         addPagesTask = (TextView) findViewById(R.id.add_pages);
+        bookPoster = (SimpleDraweeView) findViewById(R.id.book_poster);
         bookTitle = (EditText) findViewById(R.id.book_title);
         hasReadPage = (TextView) findViewById(R.id.has_read_page);
         totalPage = (TextView) findViewById(R.id.total_page);
         pageRangeListView = (ListView) findViewById(R.id.page_range_list_view);
-
         pageRangeAdapter = new PageRangeAdapter(this, pageRangeList);
         pageRangeListView.setAdapter(pageRangeAdapter);
         setSupportActionBar(toolbar);
@@ -77,6 +90,14 @@ public class AddBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        bookPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");//相片类型
+                startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
             }
         });
     }
@@ -104,11 +125,24 @@ public class AddBookActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && data.getData() != null) {
+            imagePath = FileUtil.getInstance().getAbsolutePathByUri(this, data.getData());
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("file://" + imagePath))
+                    .build();
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(request)
+                    .build();
+            bookPoster.setController(controller);
+        }
+    }
+
     private void saveBook() {
         String bookNameString = bookTitle.getText().toString();
         if (!checkBookInput(bookNameString)) return;
 
-        bookUtil.createBook(bookNameString, pageRangeList);
+        bookUtil.createBook(bookNameString, pageRangeList, imagePath);
         Toast.makeText(this, bookNameString + "保存成功", Toast.LENGTH_SHORT).show();
         finish();
     }

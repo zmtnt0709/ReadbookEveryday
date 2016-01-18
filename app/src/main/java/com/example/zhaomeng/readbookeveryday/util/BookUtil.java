@@ -67,12 +67,12 @@ public class BookUtil {
         return readProgressDao;
     }
 
-    public void createBook(String bookNameString, List<PageRange> pageRangeList) {
+    public void createBook(String bookNameString, List<PageRange> pageRangeList , String imagePath) {
         BookDao dao = getBookDao();
         if (dao == null) return;
 
         int totalPages = getTotalPages(pageRangeList);
-        BookDto bookDto = new BookDto(bookNameString, totalPages, pageRangeList);
+        BookDto bookDto = new BookDto(bookNameString, totalPages, pageRangeList, imagePath);
         try {
             dao.createOrUpdate(bookDto);
         } catch (SQLException e) {

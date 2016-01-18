@@ -13,6 +13,8 @@
     <color name="write_background">#ffffff</color>
 
     <color name="transparency_background">#00000000</color>
+    <color name="bookListPosterBackground">#ccf2514e</color>
+    <color name="addBookPosterBackground">#33000000</color>
 
 
 </resources>

@@ -3,6 +3,7 @@ package com.example.zhaomeng.readbookeveryday.sqlite;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.zhaomeng.readbookeveryday.sqlite.dao.BookDao;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.ReadProgressDto;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -16,7 +17,9 @@ import java.sql.SQLException;
  */
 public class ReadBookSQLiteOpenHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATA_BASE_NAME = "readBook";
-    private static final int DATA_BASE_VERSION = 2;
+    private static final int DATA_BASE_VERSION = 3;
+
+    private BookDao bookDao;
 
     public ReadBookSQLiteOpenHelper(Context context) {
         super(context, DATA_BASE_NAME, null, DATA_BASE_VERSION);
@@ -41,6 +44,20 @@ public class ReadBookSQLiteOpenHelper extends OrmLiteSqliteOpenHelper {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            case 2:
+                String sql = "alter table bookdto add imagePath String";
+                try {
+                    getBookDao().queryRaw(sql);
+                }catch (SQLException e) {
+                    e.printStackTrace();
+                }
         }
+    }
+
+    public BookDao getBookDao() throws SQLException {
+        if (bookDao == null) {
+            bookDao = getDao(BookDto.class);
+        }
+        return bookDao;
     }
 }

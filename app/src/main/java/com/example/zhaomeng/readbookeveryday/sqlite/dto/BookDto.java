@@ -18,6 +18,8 @@ public class BookDto {
     @DatabaseField
     private String title;       //图书标题
     @DatabaseField
+    private String imagePath;   //图书封面图片地址
+    @DatabaseField
     private int hasReadPageNum; //已阅读页数
     @DatabaseField
     private int totalPageNum;   //总页数
@@ -36,10 +38,11 @@ public class BookDto {
 
     }
 
-    public BookDto(String title, int pageNum, List<PageRange> pageRangeList) {
+    public BookDto(String title, int pageNum, List<PageRange> pageRangeList, String imagePath) {
         this.title = title;
         this.hasReadPageNum = 0;
         this.totalPageNum = pageNum;
+        this.imagePath = imagePath;
         long currentTime = System.currentTimeMillis();
         createTime = currentTime;
         updateTime = currentTime;
@@ -63,6 +66,14 @@ public class BookDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public int getTotalPageNum() {
