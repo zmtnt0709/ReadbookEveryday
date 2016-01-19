@@ -288,6 +288,15 @@ public class BookUtil {
         return (long) date * 24 * 3600 * 1000;
     }
 
+    public void updateBook(BookDto bookDto) {
+        BookDao dao = getBookDao();
+        try {
+            dao.createOrUpdate(bookDto);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     class SortBookList implements Comparator<BookDto> {
 
         @Override

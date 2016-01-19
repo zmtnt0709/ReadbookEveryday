@@ -9,10 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.zhaomeng.readbookeveryday.R;
+import com.example.zhaomeng.readbookeveryday.activity.main.fragment.BookListFragment;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,9 +28,11 @@ public class BookListAdapter extends BaseAdapter {
     private List<BookDto> bookDtoList;
     private Context context;
     private LayoutInflater inflater;
+    private BookListFragment bookListFragment;
 
-    public BookListAdapter(Context context, List<BookDto> bookDtoList) {
+    public BookListAdapter(Context context, List<BookDto> bookDtoList, BookListFragment bookListFragment) {
         this.bookDtoList = bookDtoList;
+        this.bookListFragment = bookListFragment;
         this.context = context;
         this.inflater = LayoutInflater.from(context);
     }
@@ -48,7 +53,7 @@ public class BookListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
             view = inflater.inflate(R.layout.adapter_book_list, null);
@@ -62,14 +67,25 @@ public class BookListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        BookDto bookDto = bookDtoList.get(i);
+        final BookDto bookDto = bookDtoList.get(i);
         holder.title.setText(bookDto.getTitle());
-        if(bookDto.getImagePath() != null) {
+        if (bookDto.getImagePath() != null) {
+            Uri uri = Uri.parse("file://" + bookDto.getImagePath());
+            ImageRequest request = ImageRequestBuilder
+                    .newBuilderWithSource(uri)
+                    .setProgressiveRenderingEnabled(true)
+                    .build();
             DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse("file://" + bookDto.getImagePath()))
+                    .setImageRequest(request)
                     .build();
             holder.bookPoster.setController(controller);
         }
+        holder.bookPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookListFragment.chosePosterImage(bookDto.getId(), i);
+            }
+        });
         holder.progress.setText(bookDto.getHasReadPageNum() + "/" + bookDto.getTotalPageNum());
         holder.createTime.setText(getTimeString(bookDto.getCreateTime()));
         holder.updateTime.setText(getTimeString(bookDto.getUpdateTime()) + context.getResources().getString(R.string.book_list_adapter_update_time_title));

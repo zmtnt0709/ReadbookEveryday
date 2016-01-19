@@ -56,8 +56,8 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_task);
         Fresco.initialize(this);
+        setContentView(R.layout.activity_add_task);
         initData();
         initView();
         initClickListener();
@@ -127,8 +127,8 @@ public class AddBookActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && data.getData() != null) {
-            imagePath = FileUtil.getInstance().getAbsolutePathByUri(this, data.getData());
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && data != null && data.getData() != null) {
+            imagePath = FileUtil.getInstance().saveImage(this, data.getData());
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("file://" + imagePath))
                     .build();
             DraweeController controller = Fresco.newDraweeControllerBuilder()

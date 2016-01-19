@@ -18,6 +18,7 @@ import com.example.zhaomeng.readbookeveryday.activity.bookdetail.BookDetailActiv
 import com.example.zhaomeng.readbookeveryday.activity.main.adapter.BookListAdapter;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
+import com.example.zhaomeng.readbookeveryday.util.FileUtil;
 
 import java.util.List;
 
@@ -26,13 +27,16 @@ import java.util.List;
  */
 public class BookListFragment extends android.support.v4.app.Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
     private static final String TAG = BookListFragment.class.getSimpleName();
-
+    private static final int REQUEST_CODE_PICK_IMAGE = 1;
     private SwipeRefreshLayout swipeRefresh;
     private ListView bookListView;
+    private BookListAdapter bookListAdapter;
     private boolean isRefreshing;
     private Handler handler;
     private boolean isJustCreate;
     private List<BookDto> bookList;
+    private int changePosterBookId; //要更换封面的bookid
+    private int changePosterBookNum;//要更换封面的book在list中的序号
 
     @Nullable
     @Override
@@ -83,6 +87,30 @@ public class BookListFragment extends android.support.v4.app.Fragment implements
         startActivity(intent);
     }
 
+    public void chosePosterImage(int bookId, int bookNum) {
+        changePosterBookId = bookId;
+        changePosterBookNum = bookNum;
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");//相片类型
+        startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && data != null && data.getData() != null) {
+            String imagePath = FileUtil.getInstance().saveImage(getActivity(), data.getData());
+            if (imagePath == null) return;
+
+            BookDto bookDto = bookList.get(changePosterBookNum);
+            if (changePosterBookId == bookDto.getId()) {
+                bookDto.setImagePath(imagePath);
+                BookUtil.getInstance(getActivity()).updateBook(bookDto);
+                bookListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     class UpdateBookListTask extends AsyncTask<Void, Void, List<BookDto>> {
 
         @Override
@@ -96,7 +124,7 @@ public class BookListFragment extends android.support.v4.app.Fragment implements
             if (bookDtoList == null || bookDtoList.isEmpty()) return;
 
             bookList = bookDtoList;
-            BookListAdapter bookListAdapter = new BookListAdapter(getActivity(), bookList);
+            bookListAdapter = new BookListAdapter(getActivity(), bookList, BookListFragment.this);
             bookListView.setAdapter(bookListAdapter);
         }
     }
