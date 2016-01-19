@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Created by zhaomeng on 2015/10/19.
  */
-public class BookListFragment extends android.support.v4.app.Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
     private static final String TAG = BookListFragment.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_IMAGE = 1;
     private SwipeRefreshLayout swipeRefresh;

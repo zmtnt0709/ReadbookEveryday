@@ -3,6 +3,7 @@ package com.example.zhaomeng.readbookeveryday.activity.main.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * Created by zhaomeng on 2015/11/30.
  */
-public class ReadProgressFragment extends android.support.v4.app.Fragment {
+public class ReadProgressFragment extends Fragment {
     private static final String TAG = ReadProgressFragment.class.getSimpleName();
 
     private TextView hasReadTextView;

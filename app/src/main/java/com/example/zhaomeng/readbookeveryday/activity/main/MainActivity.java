@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.activity.addbook.AddBookActivity;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.BookListFragment;
+import com.example.zhaomeng.readbookeveryday.activity.main.fragment.OnceAWeekFragment;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.ReadProgressFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -25,10 +28,11 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private RelativeLayout mainFragmenLayout;
     private NavigationView navigationView;
-    private android.support.v4.app.FragmentManager fragmentManager;
-    private android.support.v4.app.Fragment currentFragment;
+    private FragmentManager fragmentManager;
+    private Fragment currentFragment;
     private BookListFragment bookListFragment;
     private ReadProgressFragment readProgressFragment;
+    private OnceAWeekFragment onceAWeekFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +115,15 @@ public class MainActivity extends AppCompatActivity
             currentFragment = readProgressFragment;
             fragmentTransaction.show(readProgressFragment);
             fragmentTransaction.commit();
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_once_a_week) {
+            Log.d(TAG, "click nav_once_a_week");
+            if (onceAWeekFragment == null) {
+                onceAWeekFragment = new OnceAWeekFragment();
+                fragmentTransaction.add(R.id.main_fragment, onceAWeekFragment);
+            }
+            currentFragment = onceAWeekFragment;
+            fragmentTransaction.show(onceAWeekFragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

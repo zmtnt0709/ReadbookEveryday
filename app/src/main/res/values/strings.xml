@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="menu_book_list">任务列表</string>
     <string name="menu_read_progress">阅读进度</string>
+    <string name="menu_once_a_week">每周一问</string>
 
     <string name="book_list_adapter_progress_title">阅读进度：</string>
     <string name="book_list_adapter_create_time_title">创建时间：</string>
