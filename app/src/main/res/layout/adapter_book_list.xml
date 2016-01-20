@@ -78,4 +78,9 @@
         android:layout_marginTop="5dp"
         android:textColor="@color/textColorLightGray"
         android:textSize="13sp" />
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/complete"/>
 </RelativeLayout>

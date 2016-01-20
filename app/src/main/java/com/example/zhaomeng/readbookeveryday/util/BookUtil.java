@@ -67,7 +67,7 @@ public class BookUtil {
         return readProgressDao;
     }
 
-    public void createBook(String bookNameString, List<PageRange> pageRangeList , String imagePath) {
+    public void createBook(String bookNameString, List<PageRange> pageRangeList, String imagePath) {
         BookDao dao = getBookDao();
         if (dao == null) return;
 
@@ -90,9 +90,9 @@ public class BookUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if(bookList == null) return null;
+        if (bookList == null) return null;
 
-        Collections.sort(bookList,new SortBookList());
+        Collections.sort(bookList, new SortBookList());
         return bookList;
     }
 
@@ -155,7 +155,25 @@ public class BookUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    public void addTotalPageRange(int pageStartInt, int pageStopInt, BookModule bookModule) {
+        PageRange addPageRange = new PageRange(pageStartInt, pageStopInt, timeMillToDate(System.currentTimeMillis()));
+        PageRange pageRange;
+        //更新totalPageRange
+        List<PageRange> totalPageRangeList = bookModule.getTotalPageRangeList();
+        addPageRangeList(totalPageRangeList, addPageRange);
+        //更新shouldReadPageRange
+        List<PageRange> shouldReadPageRangeList = bookModule.getShouldReadPageList();
+        addPageRangeList(shouldReadPageRangeList, addPageRange);
+        bookModule.notifyAddedTotalPageRange();
+        //更新数据库
+        BookDao bookDao = getBookDao();
+        try {
+            bookDao.createOrUpdate(bookModule.getBookDto());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean removeFromPageRangeList(List<PageRange> pageRangeList, PageRange pageRange) {
@@ -178,7 +196,6 @@ public class BookUtil {
         }
         return true;
     }
-
 
     public List<ReadProgressToShow> getAllReadProgressToShow() {
         ReadProgressDao readProgressDao = getReadProgressDao();
@@ -238,7 +255,7 @@ public class BookUtil {
         //取出在总区间内的所有未读区间
         int i = 0;
         List<PageRange> shouldReadPageList = bookModule.getShouldReadPageList();
-        while (i < shouldReadPageList.size() &&  shouldReadPageList.get(i).getStopPage() < deleteReadPageRange.getStartPage()  ) {
+        while (i < shouldReadPageList.size() && shouldReadPageList.get(i).getStopPage() < deleteReadPageRange.getStartPage()) {
             i++;
         }
         if (i < shouldReadPageList.size()) {

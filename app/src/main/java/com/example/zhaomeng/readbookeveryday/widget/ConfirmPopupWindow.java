@@ -17,7 +17,7 @@ import com.example.zhaomeng.readbookeveryday.R;
  */
 abstract public class ConfirmPopupWindow {
     private View layoutView;
-    private PopupWindow pop;
+    protected PopupWindow pop;
 
     public ConfirmPopupWindow(Context context, String hintText, String positiveButtonText, String negativeButtonText) {
         layoutView = LayoutInflater.from(context).inflate(R.layout.popup_window_confirm_window, null);
@@ -48,14 +48,14 @@ abstract public class ConfirmPopupWindow {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnPositiveButtonClick();
+                onPositiveButtonClick();
                 pop.dismiss();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnNegativeButtonClick();
+                onNegativeButtonClick();
                 pop.dismiss();
             }
         });
@@ -65,7 +65,7 @@ abstract public class ConfirmPopupWindow {
         pop.showAtLocation(layoutView, Gravity.CENTER, 0, 0);
     }
 
-    abstract protected void OnPositiveButtonClick();
+    abstract protected void onPositiveButtonClick();
 
-    abstract protected void OnNegativeButtonClick();
+    abstract protected void onNegativeButtonClick();
 }

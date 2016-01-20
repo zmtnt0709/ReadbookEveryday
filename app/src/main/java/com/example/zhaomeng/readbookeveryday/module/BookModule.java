@@ -71,6 +71,13 @@ public class BookModule {
         setUpdateTime();
     }
 
+    public void notifyAddedTotalPageRange() {
+        bookDto.setTotalPageRangeList(JacksonConverterUtil.getInstance().toJsonString(totalPageRangeList));
+        bookDto.setShouldReadPageRangeList(JacksonConverterUtil.getInstance().toJsonString(shouldReadPageList));
+        setTotalPageNum();
+        setUpdateTime();
+    }
+
     private void setHasReadPageNum() {
         if (hasReadPageList == null || hasReadPageList.isEmpty()) {
             bookDto.setHasReadPageNum(0);
@@ -81,6 +88,18 @@ public class BookModule {
             tempHasReadPageNum += hasReadPageList.get(i).getTotalPage();
         }
         bookDto.setHasReadPageNum(tempHasReadPageNum);
+    }
+
+    private void setTotalPageNum() {
+        if (totalPageRangeList == null || totalPageRangeList.isEmpty()) {
+            bookDto.setTotalPageNum(0);
+            return;
+        }
+        int tempHasReadPageNum = 0;
+        for (PageRange pageRange : totalPageRangeList) {
+            tempHasReadPageNum += pageRange.getTotalPage();
+        }
+        bookDto.setTotalPageNum(tempHasReadPageNum);
     }
 
     private void setUpdateTime() {

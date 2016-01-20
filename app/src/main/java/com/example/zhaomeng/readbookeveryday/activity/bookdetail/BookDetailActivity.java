@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -35,6 +34,7 @@ import com.example.zhaomeng.readbookeveryday.module.BookModule;
 import com.example.zhaomeng.readbookeveryday.module.PageRange;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
+import com.example.zhaomeng.readbookeveryday.widget.AddPagesPopupWindow;
 import com.example.zhaomeng.readbookeveryday.widget.ConfirmPopupWindow;
 
 import java.lang.reflect.Field;
@@ -49,6 +49,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private BookUtil bookUtil;
     private TextView totalPageTextView;
     private TextView hasReadPageTextView;
+    private TextView addTotalPagesTextView;
     private ListView totalPageRangeListView;
     private ListView shouldReadPageRangeListView;
     private BookModule bookModule;
@@ -56,6 +57,8 @@ public class BookDetailActivity extends AppCompatActivity {
     private ShouldReadPageAdapter shouldReadPageRangeAdapter;
     private HasReadPageAdapter hasReadPageRangeAdapter;
     private ListView hasReadPageRangeListView;
+    private AddHasReadPagesPopupWindow addHasReadPagesPopupWindow;
+    private AddTotalPagesPopupWindow addTotalPagesPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +82,14 @@ public class BookDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         bookTitleTextView = (TextView) findViewById(R.id.book_title);
         totalPageTextView = (TextView) findViewById(R.id.total_page);
+        addTotalPagesTextView = (TextView) findViewById(R.id.add_total_pages);
         hasReadPageTextView = (TextView) findViewById(R.id.has_read_page);
         hasReadPageRangeListView = (ListView) findViewById(R.id.has_read_page_range_list);
         hasReadPageRangeListView.setOnItemLongClickListener(new HasReadListOnItemLongClick());
         totalPageRangeListView = (ListView) findViewById(R.id.total_page_range_list);
         shouldReadPageRangeListView = (ListView) findViewById(R.id.should_read_page_range_list);
+        addHasReadPagesPopupWindow = new AddHasReadPagesPopupWindow(this);
+        addTotalPagesPopupWindow = new AddTotalPagesPopupWindow(this);
         fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
@@ -97,90 +103,15 @@ public class BookDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddHasReadPagesPopupWindow();
+                addHasReadPagesPopupWindow.show();
             }
         });
-    }
-
-    private void showAddHasReadPagesPopupWindow() {
-        View layoutView = LayoutInflater.from(this).inflate(R.layout.popup_window_add_has_read_pages, null);
-        layoutView.setFocusable(true);
-        layoutView.setFocusableInTouchMode(true);
-        final EditText startPage = (EditText) layoutView.findViewById(R.id.startPage);
-        final EditText stopPage = (EditText) layoutView.findViewById(R.id.stopPage);
-        Button cancel = (Button) layoutView.findViewById(R.id.cancel_action);
-        Button add = (Button) layoutView.findViewById(R.id.add_action);
-        final PopupWindow pop = new PopupWindow(layoutView,
-                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, false);
-        pop.setFocusable(true);
-        layoutView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    pop.dismiss();
-                    return true;
-                }
-                return false;
-            }
-        });
-        add.setOnClickListener(new View.OnClickListener() {
+        addTotalPagesTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!checkPageRange(startPage, stopPage)) return;
-
-                int pageStartInt = Integer.parseInt(startPage.getText().toString());
-                int pageStopInt = Integer.parseInt(stopPage.getText().toString());
-
-                pop.dismiss();
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    showSetReadDataPopupWindow(pageStartInt, pageStopInt);
-                } else {
-                    showSetReadDataPopupWindowLollipop(pageStartInt, pageStopInt);
-                }
+                addTotalPagesPopupWindow.show();
             }
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pop.dismiss();
-            }
-        });
-        pop.showAtLocation(layoutView, Gravity.CENTER, 0, 0);
-    }
-
-    private boolean checkPageRange(EditText startPage, EditText stopPage) {
-
-        String startPageString = startPage.getText().toString();
-        String stopPageString = stopPage.getText().toString();
-        if (startPageString.equals("") || stopPageString.equals("")) {
-            Toast.makeText(this, "请输入起止页", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        int startPageInt;
-        int stopPageInt;
-        try {
-            startPageInt = Integer.parseInt(startPageString);
-            stopPageInt = Integer.parseInt(stopPageString);
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "含有非法字符", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if (startPageInt > stopPageInt) {
-            Toast.makeText(this, "截止页应小于起始页", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        //监测输入的已读区间，是否包含在未读区间中。
-        List<PageRange> shouldReadPageRangeList = bookModule.getShouldReadPageList();
-        for (PageRange pageRange : shouldReadPageRangeList) {
-            if (startPageInt >= pageRange.getStartPage() && stopPageInt <= pageRange.getStopPage()) {
-                return true;
-            }
-        }
-        Toast.makeText(this, "输入区间非法", Toast.LENGTH_LONG).show();
-        return false;
     }
 
     private void showSetReadDataPopupWindow(final int pageStartInt, final int pageStopInt) {
@@ -292,16 +223,90 @@ public class BookDetailActivity extends AppCompatActivity {
         }
     }
 
-    private class HasReadListOnItemLongClick implements AdapterView.OnItemLongClickListener{
+    private class HasReadListOnItemLongClick implements AdapterView.OnItemLongClickListener {
 
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            new DeleteConfirm(BookDetailActivity.this,"确认删除已读区间？","确认","取消",bookModule.getHasReadPageList().get(i)).show();
+            new DeleteConfirm(BookDetailActivity.this, "确认删除已读区间？", "确认", "取消", bookModule.getHasReadPageList().get(i)).show();
             return true;
         }
     }
 
-    private class DeleteConfirm extends ConfirmPopupWindow{
+    private class AddHasReadPagesPopupWindow extends AddPagesPopupWindow {
+
+        public AddHasReadPagesPopupWindow(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onPositiveButtonClick() {
+            if (!checkPageRange()) return;
+
+            int pageStartInt = getStartPage();
+            int pageStopInt = getStopPage();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                showSetReadDataPopupWindow(pageStartInt, pageStopInt);
+            } else {
+                showSetReadDataPopupWindowLollipop(pageStartInt, pageStopInt);
+            }
+        }
+
+        @Override
+        protected void onNegativeButtonClick() {
+
+        }
+
+        @Override
+        protected boolean otherCheck(int startPageInt, int stopPageInt) {
+            //监测输入的已读区间，是否包含在未读区间中。
+            List<PageRange> shouldReadPageRangeList = bookModule.getShouldReadPageList();
+            for (PageRange pageRange : shouldReadPageRangeList) {
+                if (startPageInt >= pageRange.getStartPage() && stopPageInt <= pageRange.getStopPage()) {
+                    return true;
+                }
+            }
+            Toast.makeText(context, "输入区间非法", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+    private class AddTotalPagesPopupWindow extends AddPagesPopupWindow {
+
+        public AddTotalPagesPopupWindow(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onPositiveButtonClick() {
+            if (!checkPageRange()) return;
+
+            int pageStartInt = getStartPage();
+            int pageStopInt = getStopPage();
+            bookUtil.addTotalPageRange(pageStartInt, pageStopInt, bookModule);
+            shouldReadPageRangeAdapter.notifyDataSetChanged();
+            totalPageRangeAdapter.notifyDataSetChanged();
+            totalPageTextView.setText(String.valueOf(bookModule.getBookDto().getTotalPageNum()));
+        }
+
+        @Override
+        protected void onNegativeButtonClick() {
+
+        }
+
+        @Override
+        protected boolean otherCheck(int startPageInt, int stopPageInt) {
+            List<PageRange> totalPageRangeList = bookModule.getTotalPageRangeList();
+            for (PageRange pageRange : totalPageRangeList) {
+                if (stopPageInt >= pageRange.getStartPage() && startPageInt <= pageRange.getStopPage()) {
+                    Toast.makeText(context, "输入区间非法", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    private class DeleteConfirm extends ConfirmPopupWindow {
         private PageRange deleteReadPageRange;
 
         public DeleteConfirm(Context context, String hintText, String positiveButtonText, String negativeButtonText, PageRange deleteReadPageRange) {
@@ -310,15 +315,16 @@ public class BookDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void OnPositiveButtonClick() {
-            bookUtil.deleteHasReadPageRange(deleteReadPageRange,bookModule);
+        protected void onPositiveButtonClick() {
+            bookUtil.deleteHasReadPageRange(deleteReadPageRange, bookModule);
             hasReadPageRangeAdapter.notifyDataSetChanged();
             shouldReadPageRangeAdapter.notifyDataSetChanged();
+            pop.dismiss();
         }
 
         @Override
-        protected void OnNegativeButtonClick() {
-
+        protected void onNegativeButtonClick() {
+            pop.dismiss();
         }
     }
 
