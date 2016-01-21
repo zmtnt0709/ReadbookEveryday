@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zhaomeng.readbookeveryday.R;
@@ -63,6 +64,7 @@ public class BookListAdapter extends BaseAdapter {
             holder.progress = (TextView) view.findViewById(R.id.progress);
             holder.createTime = (TextView) view.findViewById(R.id.create_time);
             holder.updateTime = (TextView) view.findViewById(R.id.last_update_time);
+            holder.complete = (ImageView) view.findViewById(R.id.read_complete);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -89,6 +91,11 @@ public class BookListAdapter extends BaseAdapter {
         holder.progress.setText(bookDto.getHasReadPageNum() + "/" + bookDto.getTotalPageNum());
         holder.createTime.setText(getTimeString(bookDto.getCreateTime()));
         holder.updateTime.setText(getTimeString(bookDto.getUpdateTime()) + context.getResources().getString(R.string.book_list_adapter_update_time_title));
+        if(bookDto.getHasReadPageNum() == bookDto.getTotalPageNum()){
+            holder.complete.setVisibility(View.VISIBLE);
+        }else {
+            holder.complete.setVisibility(View.GONE);
+        }
         return view;
     }
 
@@ -103,5 +110,6 @@ public class BookListAdapter extends BaseAdapter {
         TextView progress;
         TextView createTime;
         TextView updateTime;
+        ImageView complete;
     }
 }

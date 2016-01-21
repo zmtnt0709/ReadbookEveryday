@@ -13,15 +13,15 @@ import java.util.List;
  * Created by zhaomeng on 2015/11/30.
  */
 public class ReadProgressDao extends BaseDaoImpl<ReadProgressDto,String> {
-    protected ReadProgressDao(Class<ReadProgressDto> dataClass) throws SQLException {
+    public ReadProgressDao(Class<ReadProgressDto> dataClass) throws SQLException {
         super(dataClass);
     }
 
-    protected ReadProgressDao(ConnectionSource connectionSource, Class<ReadProgressDto> dataClass) throws SQLException {
+    public ReadProgressDao(ConnectionSource connectionSource, Class<ReadProgressDto> dataClass) throws SQLException {
         super(connectionSource, dataClass);
     }
 
-    protected ReadProgressDao(ConnectionSource connectionSource, DatabaseTableConfig<ReadProgressDto> tableConfig) throws SQLException {
+    public ReadProgressDao(ConnectionSource connectionSource, DatabaseTableConfig<ReadProgressDto> tableConfig) throws SQLException {
         super(connectionSource, tableConfig);
     }
 
