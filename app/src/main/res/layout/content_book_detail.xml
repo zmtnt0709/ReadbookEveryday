@@ -48,27 +48,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="全部页数"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/add_total_pages"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="添加页数"
-                android:textColor="@color/toolBar"
-                android:textSize="17sp" />
-        </RelativeLayout>
+            android:layout_marginTop="20dp"
+            android:text="全部页数"
+            android:textSize="17sp" />
 
         <ImageView
             android:layout_width="match_parent"

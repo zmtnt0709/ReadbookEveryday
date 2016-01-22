@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -43,13 +45,16 @@ import java.util.List;
 public class BookDetailActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
+    private FloatingActionButton fabTotal;
+    private FloatingActionButton fabHas;
+    private CoordinatorLayout fabLayout;
+    private ImageView fabBackground;
     private Toolbar toolbar;
     private TextView bookTitleTextView;
     private int id;
     private BookUtil bookUtil;
     private TextView totalPageTextView;
     private TextView hasReadPageTextView;
-    private TextView addTotalPagesTextView;
     private ListView totalPageRangeListView;
     private ListView shouldReadPageRangeListView;
     private BookModule bookModule;
@@ -59,6 +64,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private ListView hasReadPageRangeListView;
     private AddHasReadPagesPopupWindow addHasReadPagesPopupWindow;
     private AddTotalPagesPopupWindow addTotalPagesPopupWindow;
+    private boolean isShowFabView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +88,6 @@ public class BookDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         bookTitleTextView = (TextView) findViewById(R.id.book_title);
         totalPageTextView = (TextView) findViewById(R.id.total_page);
-        addTotalPagesTextView = (TextView) findViewById(R.id.add_total_pages);
         hasReadPageTextView = (TextView) findViewById(R.id.has_read_page);
         hasReadPageRangeListView = (ListView) findViewById(R.id.has_read_page_range_list);
         hasReadPageRangeListView.setOnItemLongClickListener(new HasReadListOnItemLongClick());
@@ -90,7 +95,17 @@ public class BookDetailActivity extends AppCompatActivity {
         shouldReadPageRangeListView = (ListView) findViewById(R.id.should_read_page_range_list);
         addHasReadPagesPopupWindow = new AddHasReadPagesPopupWindow(this);
         addTotalPagesPopupWindow = new AddTotalPagesPopupWindow(this);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fabHas = (FloatingActionButton) findViewById(R.id.fab_add_has);
+        fabTotal = (FloatingActionButton) findViewById(R.id.fab_add_total);
+        fabLayout = (CoordinatorLayout) findViewById(R.id.fab_layout);
+        fabBackground = (ImageView) findViewById(R.id.fab_background);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.setMargins(0,0,22,0);
+            fabLayout.setLayoutParams(layoutParams);
+        }
     }
 
     private void initEventListener() {
@@ -103,15 +118,45 @@ public class BookDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!isShowFabView) {
+                    showFabView();
+                } else {
+                    hideFabView();
+                }
+            }
+        });
+        fabHas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideFabView();
                 addHasReadPagesPopupWindow.show();
             }
         });
-        addTotalPagesTextView.setOnClickListener(new View.OnClickListener() {
+        fabTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideFabView();
                 addTotalPagesPopupWindow.show();
             }
         });
+        fabLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideFabView();
+            }
+        });
+    }
+
+    private void showFabView(){
+        fabLayout.setVisibility(View.VISIBLE);
+        fabBackground.setVisibility(View.VISIBLE);
+        isShowFabView = true;
+    }
+
+    private void hideFabView(){
+        fabLayout.setVisibility(View.GONE);
+        fabBackground.setVisibility(View.GONE);
+        isShowFabView = false;
     }
 
     private void showSetReadDataPopupWindow(final int pageStartInt, final int pageStopInt) {
