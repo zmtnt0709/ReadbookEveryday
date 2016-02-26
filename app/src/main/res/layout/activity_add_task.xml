@@ -67,6 +67,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/book_title_body_hint"
                         android:singleLine="true"
+                        android:textCursorDrawable="@null"
                         android:textSize="17sp" />
                 </LinearLayout>
 
