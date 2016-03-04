@@ -87,13 +87,13 @@ public class ReadProgressUtil {
         return readProgressToShowList;
     }
 
-    public void deleteReadProgress(PageRange deleteReadPageRange, BookModule bookModule) {
+    public void deleteReadProgress(PageRange deleteReadPageRange, int bookId) {
         ReadProgressDao readProgressDao = getReadProgressDao();
         List<ReadProgressDto> readProgressDtoList = readProgressDao.getAllReadProgress();
         int deleteProgressId = -1;
         for (ReadProgressDto readProgressDto : readProgressDtoList) {
             if (readProgressDto.getCreateDate() == deleteReadPageRange.getCreateDate()
-                    && readProgressDto.getBookId() == bookModule.getBookDto().getId()
+                    && readProgressDto.getBookId() == bookId
                     && readProgressDto.getReadPageNum() == deleteReadPageRange.getTotalPage()) {
                 deleteProgressId = readProgressDto.getId();
                 break;

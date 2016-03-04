@@ -1,6 +1,7 @@
 package com.example.zhaomeng.readbookeveryday.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ abstract public class ConfirmPopupWindow {
     private View layoutView;
     protected PopupWindow pop;
 
-    public ConfirmPopupWindow(Context context, String hintText, String positiveButtonText, String negativeButtonText) {
+    public ConfirmPopupWindow(Context context, int hintText, int positiveButtonText, int negativeButtonText) {
         layoutView = LayoutInflater.from(context).inflate(R.layout.popup_window_confirm_window, null);
         layoutView.setFocusable(true);
         layoutView.setFocusableInTouchMode(true);
@@ -27,9 +28,10 @@ abstract public class ConfirmPopupWindow {
         Button cancel = (Button) layoutView.findViewById(R.id.cancel_action);
         Button confirm = (Button) layoutView.findViewById(R.id.confirm_action);
 
-        messageText.setText(hintText);
-        confirm.setText(positiveButtonText);
-        cancel.setText(negativeButtonText);
+        Resources resources = context.getResources();
+        messageText.setText(resources.getString(hintText));
+        confirm.setText(resources.getString(positiveButtonText));
+        cancel.setText(resources.getString(negativeButtonText));
 
         pop = new PopupWindow(layoutView,
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, false);

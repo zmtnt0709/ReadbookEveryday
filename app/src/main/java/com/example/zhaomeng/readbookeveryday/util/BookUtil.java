@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class BookUtil {
     private Context context;
     private ReadBookSQLiteOpenHelper bookSQLiteOpenHelper;
     private BookDao bookDao;
+    private ReadProgressUtil readProgressUtil;
 
     public static BookUtil getInstance(Context context) {
         if (instance == null) {
@@ -38,6 +40,7 @@ public class BookUtil {
     private BookUtil(Context context) {
         this.context = context;
         bookSQLiteOpenHelper = new ReadBookSQLiteOpenHelper(context);
+        readProgressUtil = ReadProgressUtil.getInstance(context);
     }
 
     private BookDao getBookDao() {
@@ -53,29 +56,26 @@ public class BookUtil {
 
     /**
      * 新建book实例
+     *
      * @param bookNameString book的名字
-     * @param pageRangeList book的需要阅读区间
-     * @param imagePath book封面图片的地址
+     * @param pageRangeList  book的需要阅读区间
+     * @param imagePath      book封面图片的地址
      */
     public void createBook(String bookNameString, List<PageRange> pageRangeList, String imagePath) {
-        BookDao dao = getBookDao();
-        if (dao == null) return;
-
         int totalPages = getTotalPages(pageRangeList);
         BookDto bookDto = new BookDto(bookNameString, totalPages, pageRangeList, imagePath);
-        try {
-            dao.createOrUpdate(bookDto);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        createOrUpdateBookDto(bookDto);
     }
 
     /**
-     * 升级book实例
+     * 升级或创建book表实例
+     *
      * @param bookDto 需要升级的book类
      */
-    public void updateBook(BookDto bookDto) {
+    public void createOrUpdateBookDto(BookDto bookDto) {
         BookDao dao = getBookDao();
+        if (dao == null) return;
+
         try {
             dao.createOrUpdate(bookDto);
         } catch (SQLException e) {
@@ -99,8 +99,21 @@ public class BookUtil {
         return bookList;
     }
 
-    public void deleteBook(){
+    public void deleteBook(BookDto bookDto) {
+        //删除readProgress表实例
+        if (!bookDto.getHasReadPageRangeList().isEmpty() && !bookDto.getHasReadPageRangeList().equals("")) {
+            JacksonConverterUtil jacksonConverterUtil = JacksonConverterUtil.getInstance();
+            List<PageRange> hasReadPageList = jacksonConverterUtil.jsonStringToCollection(bookDto.getHasReadPageRangeList(), LinkedList.class, PageRange.class);
+            for (PageRange deletePageRange : hasReadPageList) {
+                readProgressUtil.deleteReadProgress(deletePageRange, bookDto.getId());
+            }
+        }
+        //删除book表
+        BookDao dao = getBookDao();
+        if (dao == null)
+            return;
 
+        dao.deleteBookById(bookDto.getId());
     }
 
     public int getTotalPages(List<PageRange> pageRangeList) {
@@ -138,7 +151,7 @@ public class BookUtil {
             e.printStackTrace();
         }
         //更新数据库readProgress表
-        ReadProgressUtil.getInstance(context).updateReadProgress(bookModule, hasReadPageRange);
+        readProgressUtil.updateReadProgress(bookModule, hasReadPageRange);
     }
 
     public void addTotalPageRange(int pageStartInt, int pageStopInt, BookModule bookModule) {
@@ -216,7 +229,7 @@ public class BookUtil {
             e.printStackTrace();
         }
         //删除读书进度表
-        ReadProgressUtil.getInstance(context).deleteReadProgress(deleteReadPageRange, bookModule);
+        readProgressUtil.deleteReadProgress(deleteReadPageRange, bookModule.getBookDto().getId());
     }
 
     private void resetShowReadPageRangeList(PageRange deleteReadPageRange, BookModule bookModule) {

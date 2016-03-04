@@ -29,7 +29,7 @@
                 android:id="@+id/has_read"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100页"
+                android:text="0"
                 android:textColor="@color/textColorWhite"
                 android:textSize="22sp" />
         </LinearLayout>
@@ -59,7 +59,7 @@
                 android:id="@+id/average_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10页"
+                android:text="0"
                 android:textColor="@color/textColorWhite"
                 android:textSize="22sp" />
 

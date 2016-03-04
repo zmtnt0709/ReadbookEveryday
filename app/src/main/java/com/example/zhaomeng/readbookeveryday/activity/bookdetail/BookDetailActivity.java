@@ -103,7 +103,7 @@ public class BookDetailActivity extends AppCompatActivity {
         fabBackground = (ImageView) findViewById(R.id.fab_background);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            layoutParams.setMargins(0,0,22,0);
+            layoutParams.setMargins(0, 0, 22, 0);
             fabLayout.setLayoutParams(layoutParams);
         }
     }
@@ -147,13 +147,13 @@ public class BookDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void showFabView(){
+    private void showFabView() {
         fabLayout.setVisibility(View.VISIBLE);
         fabBackground.setVisibility(View.VISIBLE);
         isShowFabView = true;
     }
 
-    private void hideFabView(){
+    private void hideFabView() {
         fabLayout.setVisibility(View.GONE);
         fabBackground.setVisibility(View.GONE);
         isShowFabView = false;
@@ -272,7 +272,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
         @Override
         public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-            new DeleteConfirm(BookDetailActivity.this, "确认删除已读区间？", "确认", "取消", bookModule.getHasReadPageList().get(i)).show();
+            new DeleteConfirm(BookDetailActivity.this, R.string.delete_has_read_page_ranges_popup, R.string.confirm, R.string.cancel, bookModule.getHasReadPageList().get(i)).show();
             return true;
         }
     }
@@ -354,7 +354,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private class DeleteConfirm extends ConfirmPopupWindow {
         private PageRange deleteReadPageRange;
 
-        public DeleteConfirm(Context context, String hintText, String positiveButtonText, String negativeButtonText, PageRange deleteReadPageRange) {
+        public DeleteConfirm(Context context, int hintText, int positiveButtonText, int negativeButtonText, PageRange deleteReadPageRange) {
             super(context, hintText, positiveButtonText, negativeButtonText);
             this.deleteReadPageRange = deleteReadPageRange;
         }

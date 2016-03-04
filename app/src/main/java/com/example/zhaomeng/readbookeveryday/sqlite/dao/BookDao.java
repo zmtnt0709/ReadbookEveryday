@@ -2,6 +2,7 @@ package com.example.zhaomeng.readbookeveryday.sqlite.dao;
 
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
@@ -33,5 +34,15 @@ public class BookDao extends BaseDaoImpl<BookDto,String>{
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void deleteBookById(int id){
+        DeleteBuilder<BookDto,String> builder = deleteBuilder();
+        try {
+            builder.where().eq("id",id);
+            delete(builder.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

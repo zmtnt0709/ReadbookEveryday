@@ -38,7 +38,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private Handler handler;
     private boolean isJustCreate;
     private List<BookDto> bookList;
-    private int changePosterBookId; //要更换封面的bookid
+    private int changePosterBookId; //要更换封面的bookId
     private int changePosterBookNum;//要更换封面的book在list中的序号
 
     @Nullable
@@ -93,8 +93,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        BookDto bookDto = bookList.get(i);
-        new DeleteConfirm(getContext(), "确认删除已读区间？", "确认", "取消", bookDto).show();
+        new DeleteConfirm(getContext(), R.string.delete_book_popup, R.string.confirm, R.string.cancel, i).show();
         return false;
     }
 
@@ -115,23 +114,25 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
             BookDto bookDto = bookList.get(changePosterBookNum);
             if (changePosterBookId == bookDto.getId()) {
                 bookDto.setImagePath(imagePath);
-                BookUtil.getInstance(getActivity()).updateBook(bookDto);
+                BookUtil.getInstance(getActivity()).createOrUpdateBookDto(bookDto);
                 bookListAdapter.notifyDataSetChanged();
             }
         }
     }
 
     private class DeleteConfirm extends ConfirmPopupWindow {
-        private BookDto bookDto;
+        private int num;
 
-        public DeleteConfirm(Context context, String hintText, String positiveButtonText, String negativeButtonText, BookDto bookDto) {
+        public DeleteConfirm(Context context, int hintText, int positiveButtonText, int negativeButtonText, int num) {
             super(context, hintText, positiveButtonText, negativeButtonText);
-            this.bookDto = bookDto;
+            this.num = num;
         }
 
         @Override
         protected void onPositiveButtonClick() {
-            BookUtil.getInstance(getActivity()).deleteBook();
+            BookUtil.getInstance(getActivity()).deleteBook(bookList.get(num));
+            bookList.remove(num);
+            bookListAdapter.notifyDataSetChanged();
             pop.dismiss();
         }
 

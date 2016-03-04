@@ -41,6 +41,15 @@ public class ReadProgressFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        Log.d(TAG, "onHiddenChanged " + hidden);
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            new GetReadProgressTask().execute();
+        }
+    }
+
     private void initView(View rootView) {
         hasReadTextView = (TextView) rootView.findViewById(R.id.has_read);
         averagePagesTextView = (TextView) rootView.findViewById(R.id.average_page);
@@ -60,36 +69,41 @@ public class ReadProgressFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<ReadProgressToShow> readProgressToShowList) {
-            if (readProgressToShowList == null || readProgressToShowList.isEmpty()) return;
+            if (readProgressToShowList == null) return;
 
             updateTextView(readProgressToShowList);
 
         }
 
         private void updateTextView(List<ReadProgressToShow> readProgressToShowList) {
+            if (readProgressToShowList.isEmpty()) {
+                hasReadTextView.setText("0");
+                averagePagesTextView.setText("0");
+                readTaskListView.setVisibility(View.GONE);
+            } else {
+                int hasReadPages = 0;
+                int firstReadDate = -1;
+                int maxReadPages = -1;
+                for (ReadProgressToShow readProgressToShow : readProgressToShowList) {
+                    hasReadPages += readProgressToShow.getReadPageNumTotal();
+                    if (firstReadDate == -1 || firstReadDate > readProgressToShow.getReadDate()) {
+                        firstReadDate = readProgressToShow.getReadDate();
+                    }
+                    if (maxReadPages < readProgressToShow.getReadPageNumTotal()) {
+                        maxReadPages = readProgressToShow.getReadPageNumTotal();
+                    }
+                }
+                hasReadTextView.setText(String.valueOf(hasReadPages));
+                int currentDate = (int) (System.currentTimeMillis() / 1000 / 3600 / 24);
+                int readDate = currentDate - firstReadDate + 1;
+                if (readDate < 0) return;
 
-            int hasReadPages = 0;
-            int firstReadDate = -1;
-            int maxReadPages = -1;
-            for (ReadProgressToShow readProgressToShow : readProgressToShowList) {
-                hasReadPages += readProgressToShow.getReadPageNumTotal();
-                if (firstReadDate == -1 || firstReadDate > readProgressToShow.getReadDate()) {
-                    firstReadDate = readProgressToShow.getReadDate();
-                }
-                if (maxReadPages < readProgressToShow.getReadPageNumTotal()) {
-                    maxReadPages = readProgressToShow.getReadPageNumTotal();
-                }
+                int averagePages = hasReadPages / readDate;
+                averagePagesTextView.setText(String.valueOf(averagePages));
+                ReadProgressAdapter readProgressAdapter = new ReadProgressAdapter(getActivity(), readProgressToShowList, maxReadPages);
+                readTaskListView.setAdapter(readProgressAdapter);
+                readTaskListView.setVisibility(View.VISIBLE);
             }
-            hasReadTextView.setText(String.valueOf(hasReadPages));
-            int currentDate = (int) (System.currentTimeMillis() / 1000 / 3600 / 24);
-            int readDate = currentDate - firstReadDate + 1;
-            if (readDate < 0) return;
-
-            int averagePages = hasReadPages / readDate;
-            averagePagesTextView.setText(String.valueOf(averagePages));
-
-            ReadProgressAdapter readProgressAdapter = new ReadProgressAdapter(getActivity(), readProgressToShowList, maxReadPages);
-            readTaskListView.setAdapter(readProgressAdapter);
         }
     }
 }
