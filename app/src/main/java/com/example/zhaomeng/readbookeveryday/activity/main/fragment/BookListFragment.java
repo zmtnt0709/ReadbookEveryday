@@ -1,5 +1,6 @@
 package com.example.zhaomeng.readbookeveryday.activity.main.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,13 +21,14 @@ import com.example.zhaomeng.readbookeveryday.activity.main.adapter.BookListAdapt
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
 import com.example.zhaomeng.readbookeveryday.util.FileUtil;
+import com.example.zhaomeng.readbookeveryday.widget.ConfirmPopupWindow;
 
 import java.util.List;
 
 /**
  * Created by zhaomeng on 2015/10/19.
  */
-public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = BookListFragment.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_IMAGE = 1;
     private SwipeRefreshLayout swipeRefresh;
@@ -51,6 +53,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefresh.setColorSchemeResources(R.color.toolBar);
         bookListView = (ListView) rootView.findViewById(R.id.book_list_view);
         bookListView.setOnItemClickListener(this);
+        bookListView.setOnItemLongClickListener(this);
         isJustCreate = true;
         new UpdateBookListTask().execute();
         return rootView;
@@ -88,6 +91,13 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
         startActivity(intent);
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        BookDto bookDto = bookList.get(i);
+        new DeleteConfirm(getContext(), "确认删除已读区间？", "确认", "取消", bookDto).show();
+        return false;
+    }
+
     public void chosePosterImage(int bookId, int bookNum) {
         changePosterBookId = bookId;
         changePosterBookNum = bookNum;
@@ -95,7 +105,6 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
         intent.setType("image/*");//相片类型
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -109,6 +118,26 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 BookUtil.getInstance(getActivity()).updateBook(bookDto);
                 bookListAdapter.notifyDataSetChanged();
             }
+        }
+    }
+
+    private class DeleteConfirm extends ConfirmPopupWindow {
+        private BookDto bookDto;
+
+        public DeleteConfirm(Context context, String hintText, String positiveButtonText, String negativeButtonText, BookDto bookDto) {
+            super(context, hintText, positiveButtonText, negativeButtonText);
+            this.bookDto = bookDto;
+        }
+
+        @Override
+        protected void onPositiveButtonClick() {
+            BookUtil.getInstance(getActivity()).deleteBook();
+            pop.dismiss();
+        }
+
+        @Override
+        protected void onNegativeButtonClick() {
+            pop.dismiss();
         }
     }
 

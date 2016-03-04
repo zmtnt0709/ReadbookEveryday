@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.activity.main.adapter.ReadProgressAdapter;
 import com.example.zhaomeng.readbookeveryday.module.ReadProgressToShow;
-import com.example.zhaomeng.readbookeveryday.util.BookUtil;
+import com.example.zhaomeng.readbookeveryday.util.ReadProgressUtil;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ReadProgressFragment extends Fragment {
     private TextView averagePagesTextView;
     private ListView readTaskListView;
 
-    private BookUtil bookUtil;
+    private ReadProgressUtil readProgressUtil;
 
     @Nullable
     @Override
@@ -48,14 +48,14 @@ public class ReadProgressFragment extends Fragment {
     }
 
     private void initDate() {
-        bookUtil = BookUtil.getInstance(getActivity());
+        readProgressUtil = ReadProgressUtil.getInstance(getActivity());
     }
 
     class GetReadProgressTask extends AsyncTask<Void, Void, List<ReadProgressToShow>> {
 
         @Override
         protected List<ReadProgressToShow> doInBackground(Void... voids) {
-            return bookUtil.getAllReadProgressToShow();
+            return readProgressUtil.getAllReadProgressToShow();
         }
 
         @Override
