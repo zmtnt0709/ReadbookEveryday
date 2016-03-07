@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +22,16 @@ import java.util.List;
 /**
  * Created by zhaomeng on 2015/11/30.
  */
-public class ReadProgressFragment extends Fragment {
+public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private static final String TAG = ReadProgressFragment.class.getSimpleName();
 
     private TextView hasReadTextView;
     private TextView averagePagesTextView;
     private ListView readTaskListView;
+    private SwipeRefreshLayout swipeRefresh;
 
     private ReadProgressUtil readProgressUtil;
+    private boolean isRefreshing;
 
     @Nullable
     @Override
@@ -37,7 +40,7 @@ public class ReadProgressFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_read_progress, container, false);
         initView(rootView);
         initDate();
-        new GetReadProgressTask().execute();
+        onRefresh();
         return rootView;
     }
 
@@ -46,11 +49,14 @@ public class ReadProgressFragment extends Fragment {
         Log.d(TAG, "onHiddenChanged " + hidden);
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            new GetReadProgressTask().execute();
+            onRefresh();
         }
     }
 
     private void initView(View rootView) {
+        swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setColorSchemeResources(R.color.toolBar);
         hasReadTextView = (TextView) rootView.findViewById(R.id.has_read);
         averagePagesTextView = (TextView) rootView.findViewById(R.id.average_page);
         readTaskListView = (ListView) rootView.findViewById(R.id.read_progress_list_view);
@@ -60,26 +66,34 @@ public class ReadProgressFragment extends Fragment {
         readProgressUtil = ReadProgressUtil.getInstance(getActivity());
     }
 
-    class GetReadProgressTask extends AsyncTask<Void, Void, List<ReadProgressToShow>> {
+    @Override
+    public void onRefresh() {
+        if(!isRefreshing){
+            new GetReadProgressTask().execute();
+        }
+    }
+
+    class GetReadProgressTask extends AsyncTask<Void, Void, Boolean> {
+        private String hasReadPagesString;
+        private String averagePagesString;
+        private ReadProgressAdapter readProgressAdapter;
 
         @Override
-        protected List<ReadProgressToShow> doInBackground(Void... voids) {
-            return readProgressUtil.getAllReadProgressToShow();
+        protected void onPreExecute() {
+            isRefreshing = true;
+            swipeRefresh.setRefreshing(true);
         }
 
         @Override
-        protected void onPostExecute(List<ReadProgressToShow> readProgressToShowList) {
-            if (readProgressToShowList == null) return;
-
-            updateTextView(readProgressToShowList);
-
-        }
-
-        private void updateTextView(List<ReadProgressToShow> readProgressToShowList) {
-            if (readProgressToShowList.isEmpty()) {
-                hasReadTextView.setText("0");
-                averagePagesTextView.setText("0");
-                readTaskListView.setVisibility(View.GONE);
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            List<ReadProgressToShow> readProgressToShowList = readProgressUtil.getAllReadProgressToShow();
+            if (readProgressToShowList == null || readProgressToShowList.isEmpty()) {
+                return false;
             } else {
                 int hasReadPages = 0;
                 int firstReadDate = -1;
@@ -93,17 +107,32 @@ public class ReadProgressFragment extends Fragment {
                         maxReadPages = readProgressToShow.getReadPageNumTotal();
                     }
                 }
-                hasReadTextView.setText(String.valueOf(hasReadPages));
+                hasReadPagesString = String.valueOf(hasReadPages);
                 int currentDate = (int) (System.currentTimeMillis() / 1000 / 3600 / 24);
                 int readDate = currentDate - firstReadDate + 1;
-                if (readDate < 0) return;
+                if (readDate < 0)  return false;
 
                 int averagePages = hasReadPages / readDate;
-                averagePagesTextView.setText(String.valueOf(averagePages));
-                ReadProgressAdapter readProgressAdapter = new ReadProgressAdapter(getActivity(), readProgressToShowList, maxReadPages);
+                averagePagesString = String.valueOf(averagePages);
+                readProgressAdapter = new ReadProgressAdapter(getActivity(), readProgressToShowList, maxReadPages);
+                return true;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean hasDate) {
+            if (!hasDate) {
+                hasReadTextView.setText("0");
+                averagePagesTextView.setText("0");
+                readTaskListView.setVisibility(View.GONE);
+            } else {
+                hasReadTextView.setText(hasReadPagesString);
+                averagePagesTextView.setText(averagePagesString);
                 readTaskListView.setAdapter(readProgressAdapter);
                 readTaskListView.setVisibility(View.VISIBLE);
             }
+            swipeRefresh.setRefreshing(false);
+            isRefreshing = false;
         }
     }
 }

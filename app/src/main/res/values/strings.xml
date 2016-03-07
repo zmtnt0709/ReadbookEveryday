@@ -16,6 +16,7 @@
     <string name="book_list_adapter_create_time_title">创建时间：</string>
     <string name="book_list_adapter_update_time_title">更新</string>
     <!--AddBookActivity-->
+    <string name="add_book_activity_title">添加图书</string>
     <string name="book_title_title">书  名：</string>
     <string name="book_has_read_page_title">已  读：</string>
     <string name="book_total_page">页  数：</string>

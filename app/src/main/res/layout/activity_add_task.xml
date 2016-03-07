@@ -13,7 +13,7 @@
         android:background="?attr/colorPrimary"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:title="添加图书" />
+        app:title="@string/add_book_activity_title" />
 
     <RelativeLayout
         android:id="@+id/book_details_layout"

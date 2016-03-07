@@ -57,7 +57,7 @@ public class BookListAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
-            view = inflater.inflate(R.layout.adapter_book_list, null);
+            view = inflater.inflate(R.layout.adapter_book_list, viewGroup,false);
             holder = new ViewHolder();
             holder.title = (TextView) view.findViewById(R.id.book_title);
             holder.bookPoster = (SimpleDraweeView) view.findViewById(R.id.book_poster);

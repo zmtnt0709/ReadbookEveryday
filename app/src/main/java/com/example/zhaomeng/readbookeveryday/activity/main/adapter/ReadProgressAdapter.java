@@ -50,7 +50,7 @@ public class ReadProgressAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
-            view = inflater.inflate(R.layout.adapter_read_progress, null);
+            view = inflater.inflate(R.layout.adapter_read_progress, viewGroup,false);
             holder = new ViewHolder();
             holder.readDateTextView = (TextView) view.findViewById(R.id.read_date);
             holder.readPagesTextView = (TextView) view.findViewById(R.id.read_pages);

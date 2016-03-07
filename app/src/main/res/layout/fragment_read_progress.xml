@@ -67,11 +67,17 @@
 
     </LinearLayout>
 
-    <ListView
-        android:layout_marginTop="10dp"
-        android:id="@+id/read_progress_list_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"/>
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
+        <ListView
+            android:id="@+id/read_progress_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

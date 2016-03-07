@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -35,8 +34,6 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ListView bookListView;
     private BookListAdapter bookListAdapter;
     private boolean isRefreshing;
-    private Handler handler;
-    private boolean isJustCreate;
     private List<BookDto> bookList;
     private int changePosterBookId; //要更换封面的bookId
     private int changePosterBookNum;//要更换封面的book在list中的序号
@@ -47,39 +44,25 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
         Log.d(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_book_list, container, false);
 
-        handler = new Handler();
         swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeResources(R.color.toolBar);
         bookListView = (ListView) rootView.findViewById(R.id.book_list_view);
         bookListView.setOnItemClickListener(this);
         bookListView.setOnItemLongClickListener(this);
-        isJustCreate = true;
-        new UpdateBookListTask().execute();
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (isJustCreate) {
-            isJustCreate = false;
-        } else {
-            onRefresh();
-        }
+        onRefresh();
     }
 
     @Override
     public void onRefresh() {
         if (!isRefreshing) {
-            isRefreshing = true;
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    new UpdateBookListTask().execute();
-                    swipeRefresh.setRefreshing(false);
-                    isRefreshing = false;
-                }
-            }, 1000);
+            new UpdateBookListTask().execute();
         }
     }
 
@@ -143,9 +126,19 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     class UpdateBookListTask extends AsyncTask<Void, Void, List<BookDto>> {
+        @Override
+        protected void onPreExecute() {
+            swipeRefresh.setRefreshing(true);
+            isRefreshing = true;
+        }
 
         @Override
         protected List<BookDto> doInBackground(Void... voids) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return BookUtil.getInstance(getActivity()).getAllBookList();
         }
 
@@ -157,6 +150,8 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
             bookList = bookDtoList;
             bookListAdapter = new BookListAdapter(getActivity(), bookList, BookListFragment.this);
             bookListView.setAdapter(bookListAdapter);
+            swipeRefresh.setRefreshing(false);
+            isRefreshing = false;
         }
     }
 }

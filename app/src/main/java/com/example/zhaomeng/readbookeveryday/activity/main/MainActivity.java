@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.activity.addbook.AddBookActivity;
@@ -26,13 +25,14 @@ import com.example.zhaomeng.readbookeveryday.activity.main.fragment.ReadProgress
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private RelativeLayout mainFragmenLayout;
     private NavigationView navigationView;
+    private FloatingActionButton fab;
     private FragmentManager fragmentManager;
     private Fragment currentFragment;
     private BookListFragment bookListFragment;
     private ReadProgressFragment readProgressFragment;
     private OnceAWeekFragment onceAWeekFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new OnFloatingActionButtonClick());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainFragmenLayout = (RelativeLayout) findViewById(R.id.main_fragment);
         fragmentManager = getSupportFragmentManager();
         initFragment();
     }
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity
             currentFragment = bookListFragment;
             fragmentTransaction.show(bookListFragment);
             fragmentTransaction.commit();
-
+            fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_read_progress) {
             Log.d(TAG, "click nav_read_progress");
             if (readProgressFragment == null) {
@@ -115,6 +114,7 @@ public class MainActivity extends AppCompatActivity
             currentFragment = readProgressFragment;
             fragmentTransaction.show(readProgressFragment);
             fragmentTransaction.commit();
+            fab.setVisibility(View.GONE);
         } else if (id == R.id.nav_once_a_week) {
             Log.d(TAG, "click nav_once_a_week");
             if (onceAWeekFragment == null) {
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity
             currentFragment = onceAWeekFragment;
             fragmentTransaction.show(onceAWeekFragment);
             fragmentTransaction.commit();
+            fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -144,8 +145,6 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "OnFloatingActionButtonClick");
             Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
         }
     }
 }

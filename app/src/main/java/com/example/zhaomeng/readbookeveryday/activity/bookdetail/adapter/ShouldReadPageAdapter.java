@@ -50,7 +50,7 @@ public class ShouldReadPageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
-            view = inflater.inflate(R.layout.adapter_page_range, null);
+            view = inflater.inflate(R.layout.adapter_page_range, viewGroup, false);
             holder = new ViewHolder();
             holder.startPage = (TextView) view.findViewById(R.id.start_page);
             holder.stopPage = (TextView) view.findViewById(R.id.stop_page);
