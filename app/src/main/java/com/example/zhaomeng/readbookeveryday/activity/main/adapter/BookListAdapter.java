@@ -57,7 +57,7 @@ public class BookListAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null) {
-            view = inflater.inflate(R.layout.adapter_book_list, viewGroup,false);
+            view = inflater.inflate(R.layout.adapter_book_list, viewGroup, false);
             holder = new ViewHolder();
             holder.title = (TextView) view.findViewById(R.id.book_title);
             holder.bookPoster = (SimpleDraweeView) view.findViewById(R.id.book_poster);
@@ -91,9 +91,9 @@ public class BookListAdapter extends BaseAdapter {
         holder.progress.setText(bookDto.getHasReadPageNum() + "/" + bookDto.getTotalPageNum());
         holder.createTime.setText(getTimeString(bookDto.getCreateTime()));
         holder.updateTime.setText(getTimeString(bookDto.getUpdateTime()) + context.getResources().getString(R.string.book_list_adapter_update_time_title));
-        if(bookDto.getHasReadPageNum() == bookDto.getTotalPageNum()){
+        if (bookDto.getHasReadPageNum() == bookDto.getTotalPageNum()) {
             holder.complete.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.complete.setVisibility(View.GONE);
         }
         return view;

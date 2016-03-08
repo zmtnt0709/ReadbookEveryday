@@ -16,5 +16,7 @@
     <color name="bookListPosterBackground">#ccf2514e</color>
     <color name="addBookPosterBackground">#33000000</color>
 
+    <color name="book_list_divider">#909090</color>
+
 
 </resources>

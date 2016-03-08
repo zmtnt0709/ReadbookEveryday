@@ -3,10 +3,10 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/book_poster"
@@ -85,4 +85,11 @@
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:src="@drawable/complete"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/book_poster"
+        android:background="@color/book_list_divider"/>
 </RelativeLayout>
