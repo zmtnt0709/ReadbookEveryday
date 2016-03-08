@@ -87,7 +87,7 @@
                     android:id="@+id/book_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/textColorWhite"
+                    android:textColor="@color/text_color_white"
                     android:textSize="20sp" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -125,7 +125,7 @@
             android:layout_marginTop="230dp"
             android:gravity="center"
             android:text="添加已读"
-            android:textColor="@color/textColorWhite"
+            android:textColor="@color/text_color_white"
             android:textSize="17sp" />
 
         <android.support.design.widget.FloatingActionButton
@@ -145,7 +145,7 @@
             android:layout_marginTop="310dp"
             android:gravity="center"
             android:text="添加全部"
-            android:textColor="@color/textColorWhite"
+            android:textColor="@color/text_color_white"
             android:textSize="17sp" />
 
         <android.support.design.widget.FloatingActionButton

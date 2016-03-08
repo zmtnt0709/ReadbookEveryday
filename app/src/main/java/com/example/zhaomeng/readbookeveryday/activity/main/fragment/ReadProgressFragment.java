@@ -56,7 +56,7 @@ public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout
     private void initView(View rootView) {
         swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
         swipeRefresh.setOnRefreshListener(this);
-        swipeRefresh.setColorSchemeResources(R.color.toolBar);
+        swipeRefresh.setColorSchemeResources(R.color.tool_bar);
         hasReadTextView = (TextView) rootView.findViewById(R.id.has_read);
         averagePagesTextView = (TextView) rootView.findViewById(R.id.average_page);
         readTaskListView = (ListView) rootView.findViewById(R.id.read_progress_list_view);

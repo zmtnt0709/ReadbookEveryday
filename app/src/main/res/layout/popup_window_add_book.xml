@@ -77,9 +77,9 @@
                 android:layout_width="100dp"
                 android:layout_height="32dp"
                 android:layout_marginBottom="30dp"
-                android:background="@color/toolBar"
+                android:background="@color/tool_bar"
                 android:text="@string/popup_window_add"
-                android:textColor="@color/textColorWhite"
+                android:textColor="@color/text_color_white"
                 android:textSize="16sp" />
 
         </LinearLayout>

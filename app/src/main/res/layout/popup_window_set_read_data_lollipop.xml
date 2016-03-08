@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/page_layout"
             android:gravity="center_horizontal"
-            android:background="@color/toolBar"
-            android:textColor="@color/textColorWhite"
+            android:background="@color/tool_bar"
+            android:textColor="@color/text_color_white"
             android:padding="10dp"
             android:text="设置阅读时间"
             android:textSize="17sp" />
@@ -50,9 +50,9 @@
                 android:id="@+id/add_action"
                 android:layout_width="100dp"
                 android:layout_height="32dp"
-                android:background="@color/toolBar"
+                android:background="@color/tool_bar"
                 android:text="@string/popup_window_add"
-                android:textColor="@color/textColorWhite"
+                android:textColor="@color/text_color_white"
                 android:textSize="16sp" />
         </LinearLayout>
     </RelativeLayout>

@@ -258,7 +258,7 @@ public class BookDetailActivity extends AppCompatActivity {
                 if (pf.getName().equals("mSelectionDivider")) {
                     pf.setAccessible(true);
                     try {
-                        pf.set(picker, new ColorDrawable(getResources().getColor(R.color.toolBar)));
+                        pf.set(picker, new ColorDrawable(getResources().getColor(R.color.tool_bar)));
                     } catch (IllegalArgumentException | IllegalAccessException | Resources.NotFoundException e) {
                         e.printStackTrace();
                     }

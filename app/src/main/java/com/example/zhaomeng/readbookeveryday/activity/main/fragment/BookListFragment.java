@@ -46,7 +46,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         swipeRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
         swipeRefresh.setOnRefreshListener(this);
-        swipeRefresh.setColorSchemeResources(R.color.toolBar);
+        swipeRefresh.setColorSchemeResources(R.color.tool_bar);
         bookListView = (ListView) rootView.findViewById(R.id.book_list_view);
         bookListView.setOnItemClickListener(this);
         bookListView.setOnItemLongClickListener(this);

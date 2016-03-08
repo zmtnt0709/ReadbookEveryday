@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:background="@color/toolBar"
+        android:background="@color/tool_bar"
         android:paddingBottom="20dp">
 
         <RelativeLayout
@@ -38,7 +38,7 @@
                 android:layout_marginTop="10dp"
                 android:scaleType="fitXY"
                 fresco:actualImageScaleType="fitXY"
-                fresco:backgroundImage="@color/addBookPosterBackground"
+                fresco:backgroundImage="@color/add_book_poster_background"
                 fresco:failureImage="@android:drawable/ic_menu_camera"
                 fresco:placeholderImage="@android:drawable/ic_menu_camera"/>
 
@@ -122,7 +122,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:text="@string/add_pages"
-        android:textColor="@color/toolBar"
+        android:textColor="@color/tool_bar"
         android:textSize="17sp" />
 
     <ListView
