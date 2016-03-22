@@ -9,6 +9,7 @@
     <string name="menu_book_list">任务列表</string>
     <string name="menu_read_progress">阅读进度</string>
     <string name="menu_once_a_week">每周一问</string>
+    <string name="group_menu_other_page">其他页面</string>
     <string name="menu_save_restore">备份还原</string>
 
     <string name="delete_book_popup">是否删除读书记录？</string>
@@ -41,5 +42,13 @@
     <string name="has_read_page_title">已阅读：</string>
     <string name="total_page_title">总页数：</string>
 
-    <string name="delete_has_read_page_ranges_popup">确认删除已读区间？</string>>
+    <string name="delete_has_read_page_ranges_popup">确认删除已读区间？</string>
+
+    <!--SaveAndRestoreActivity-->
+    <string name="save_button_text">备份</string>
+    <string name="restore_button_text">还原</string>
+    <string name="save_success">备份成功，文件已备份至\n\r</string>
+    <string name="save_failed">备份失败</string>
+    <string name="restore_success">还原成功 重启应用后生效</string>
+    <string name="restore_failed">还原失败</string>
 </resources>

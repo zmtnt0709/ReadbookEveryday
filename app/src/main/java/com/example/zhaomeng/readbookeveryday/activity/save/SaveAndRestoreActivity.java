@@ -68,9 +68,9 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
         String saveFileName = fileUtil.getSaveFileName();
         boolean success = fileUtil.saveData(this, savePath, saveFileName);
         if (success) {
-            Toast.makeText(this, "备份成功，文件已备份至\n\r" + savePath + saveFileName, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getResources().getString(R.string.save_success) + savePath + saveFileName, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "备份失败", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getResources().getString(R.string.save_failed), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -83,10 +83,10 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
 
     private void restoreData(String filePath) {
         boolean success = fileUtil.restoreData(this, filePath);
-        if(success){
-            Toast.makeText(this, "还原成功 重启应用后生效", Toast.LENGTH_LONG).show();
-        }else {
-            Toast.makeText(this, "还原失败", Toast.LENGTH_LONG).show();
+        if (success) {
+            Toast.makeText(this, this.getResources().getString(R.string.restore_success), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, this.getResources().getString(R.string.restore_failed), Toast.LENGTH_LONG).show();
         }
     }
 }

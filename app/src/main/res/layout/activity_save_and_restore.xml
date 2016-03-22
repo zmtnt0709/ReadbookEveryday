@@ -29,19 +29,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="100dp"
             android:background="@color/tool_bar"
-            android:text="备份"
+            android:text="@string/save_button_text"
             android:textSize="17sp" />
-
 
         <Button
             android:id="@+id/restore_button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@color/tool_bar"
-            android:text="还原"
+            android:text="@string/restore_button_text"
             android:textSize="17sp" />
 
     </LinearLayout>
-
-
 </RelativeLayout>
