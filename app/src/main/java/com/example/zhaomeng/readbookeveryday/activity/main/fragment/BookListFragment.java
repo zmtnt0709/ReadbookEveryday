@@ -97,7 +97,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
             BookDto bookDto = bookList.get(changePosterBookNum);
             if (changePosterBookId == bookDto.getId()) {
                 bookDto.setImagePath(imagePath);
-                BookUtil.getInstance(getActivity()).createOrUpdateBookDto(bookDto);
+                BookUtil.getInstance(getActivity().getApplicationContext()).createOrUpdateBookDto(bookDto);
                 bookListAdapter.notifyDataSetChanged();
             }
         }
@@ -113,7 +113,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         @Override
         protected void onPositiveButtonClick() {
-            BookUtil.getInstance(getActivity()).deleteBook(bookList.get(num));
+            BookUtil.getInstance(getActivity().getApplicationContext()).deleteBook(bookList.get(num));
             bookList.remove(num);
             bookListAdapter.notifyDataSetChanged();
             pop.dismiss();
@@ -139,7 +139,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return BookUtil.getInstance(getActivity()).getAllBookList();
+            return BookUtil.getInstance(getActivity().getApplicationContext()).getAllBookListToShow();
         }
 
         @Override

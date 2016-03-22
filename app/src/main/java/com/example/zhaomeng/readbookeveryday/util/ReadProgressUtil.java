@@ -38,7 +38,7 @@ public class ReadProgressUtil {
         bookSQLiteOpenHelper = new ReadBookSQLiteOpenHelper(context);
     }
 
-    private ReadProgressDao getReadProgressDao() {
+    public ReadProgressDao getReadProgressDao() {
         if (readProgressDao == null) {
             try {
                 readProgressDao = bookSQLiteOpenHelper.getDao(ReadProgressDto.class);
@@ -52,6 +52,15 @@ public class ReadProgressUtil {
     public void updateReadProgress(BookModule bookModule, PageRange hasReadPageRange) {
         ReadProgressDao readProgressDao = getReadProgressDao();
         ReadProgressDto readProgressDto = new ReadProgressDto(bookModule, hasReadPageRange);
+        try {
+            readProgressDao.createOrUpdate(readProgressDto);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createOrUpdateReadProgress(ReadProgressDto readProgressDto){
+        ReadProgressDao readProgressDao = getReadProgressDao();
         try {
             readProgressDao.createOrUpdate(readProgressDto);
         } catch (SQLException e) {

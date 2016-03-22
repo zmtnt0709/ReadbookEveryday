@@ -9,6 +9,7 @@
     <string name="menu_book_list">任务列表</string>
     <string name="menu_read_progress">阅读进度</string>
     <string name="menu_once_a_week">每周一问</string>
+    <string name="menu_save_restore">备份还原</string>
 
     <string name="delete_book_popup">是否删除读书记录？</string>
 

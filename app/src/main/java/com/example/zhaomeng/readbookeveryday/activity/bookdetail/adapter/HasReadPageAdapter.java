@@ -61,7 +61,7 @@ public class HasReadPageAdapter extends BaseAdapter {
         }
         holder.startPage.setText(hasReadPageRangeList.get(i).getStartPage() + context.getResources().getString(R.string.page_range_adapter_page_title));
         holder.stopPage.setText(hasReadPageRangeList.get(i).getStopPage() + context.getResources().getString(R.string.page_range_adapter_page_title));
-        holder.readDate.setText(getTimeString(BookUtil.getInstance(context).dateToTimeMill(hasReadPageRangeList.get(i).getCreateDate())));
+        holder.readDate.setText(getTimeString(BookUtil.getInstance(context.getApplicationContext()).dateToTimeMill(hasReadPageRangeList.get(i).getCreateDate())));
         return view;
     }
 

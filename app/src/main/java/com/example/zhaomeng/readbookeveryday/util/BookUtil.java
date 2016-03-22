@@ -43,7 +43,7 @@ public class BookUtil {
         readProgressUtil = ReadProgressUtil.getInstance(context);
     }
 
-    private BookDao getBookDao() {
+    public BookDao getBookDao() {
         if (bookDao == null) {
             try {
                 bookDao = bookSQLiteOpenHelper.getDao(BookDto.class);
@@ -83,17 +83,12 @@ public class BookUtil {
         }
     }
 
-    public List<BookDto> getAllBookList() {
+    public List<BookDto> getAllBookListToShow() {
         BookDao dao = getBookDao();
         if (dao == null) return null;
 
-        List<BookDto> bookList = null;
-        try {
-            bookList = dao.queryForAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (bookList == null) return null;
+        List<BookDto> bookList = dao.getAllBookList();
+        if(bookList == null) return null;
 
         Collections.sort(bookList, new SortBookList());
         return bookList;
@@ -156,7 +151,6 @@ public class BookUtil {
 
     public void addTotalPageRange(int pageStartInt, int pageStopInt, BookModule bookModule) {
         PageRange addPageRange = new PageRange(pageStartInt, pageStopInt, timeMillToDate(System.currentTimeMillis()));
-        PageRange pageRange;
         //更新totalPageRange
         List<PageRange> totalPageRangeList = bookModule.getTotalPageRangeList();
         addPageRangeList(totalPageRangeList, addPageRange);

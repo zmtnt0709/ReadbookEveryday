@@ -46,6 +46,17 @@ public class JacksonConverterUtil {
         return "";
     }
 
+    public <T> T jsonStringToObject(String content, Class<T> clazz) {
+        if (null != content) {
+            try {
+                return objectMapper.readValue(content, clazz);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public <T> T jsonStringToCollection(String jsonString, Class<? extends Collection> collectionClass, Class<?> elementClasses) {
         if (null == jsonString || jsonString.equals("")) return null;
 

@@ -103,7 +103,7 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        bookUtil = BookUtil.getInstance(this);
+        bookUtil = BookUtil.getInstance(this.getApplicationContext());
         pageRangeList = new LinkedList<>();
     }
 

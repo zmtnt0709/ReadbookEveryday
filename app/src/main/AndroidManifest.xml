@@ -29,7 +29,10 @@
         <activity
             android:name=".activity.bookdetail.BookDetailActivity"
             android:label="@string/title_activity_book_detail"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.save.SaveAndRestoreActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

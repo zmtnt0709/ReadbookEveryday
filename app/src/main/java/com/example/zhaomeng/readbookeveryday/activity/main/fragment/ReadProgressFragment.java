@@ -63,7 +63,7 @@ public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout
     }
 
     private void initDate() {
-        readProgressUtil = ReadProgressUtil.getInstance(getActivity());
+        readProgressUtil = ReadProgressUtil.getInstance(getActivity().getApplicationContext());
     }
 
     @Override

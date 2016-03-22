@@ -8,6 +8,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by zhaomeng on 2015/10/20.
@@ -23,6 +24,16 @@ public class BookDao extends BaseDaoImpl<BookDto,String>{
 
     public BookDao(ConnectionSource connectionSource, DatabaseTableConfig<BookDto> tableConfig) throws SQLException {
         super(connectionSource, tableConfig);
+    }
+
+    public List<BookDto> getAllBookList() {
+        List<BookDto> bookList = null;
+        try {
+            bookList = queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookList;
     }
 
     public BookDto getBookById(int id) {

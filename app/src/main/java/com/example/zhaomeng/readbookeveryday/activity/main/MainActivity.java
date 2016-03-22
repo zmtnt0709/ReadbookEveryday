@@ -21,6 +21,7 @@ import com.example.zhaomeng.readbookeveryday.activity.addbook.AddBookActivity;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.BookListFragment;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.OnceAWeekFragment;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.ReadProgressFragment;
+import com.example.zhaomeng.readbookeveryday.activity.save.SaveAndRestoreActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -125,12 +126,9 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.show(onceAWeekFragment);
             fragmentTransaction.commit();
             fab.setVisibility(View.VISIBLE);
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }  else if (id == R.id.nav_save_restore) {
+            Intent intent = new Intent(MainActivity.this, SaveAndRestoreActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

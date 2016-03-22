@@ -78,7 +78,7 @@ public class BookDetailActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        bookUtil = BookUtil.getInstance(this);
+        bookUtil = BookUtil.getInstance(this.getApplicationContext());
     }
 
     private void initViews() {
