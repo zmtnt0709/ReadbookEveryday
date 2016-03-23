@@ -14,7 +14,7 @@
         android:background="?attr/colorPrimary"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:title="@string/add_book_activity_title" />
+        app:title="@string/save_and_restore_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
