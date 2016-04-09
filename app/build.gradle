@@ -11,8 +11,27 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    //签名配置
+    signingConfigs {
+        mainApkSigning {
+            storeFile file("keystore/zmkey.jks")
+            storePassword "zhaomeng00"
+            keyAlias "zhaomeng"
+            keyPassword "zhaomeng00"
+        }
+    }
+
+    //打包类型配置
     buildTypes {
         release {
+            signingConfig signingConfigs.mainApkSigning
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.mainApkSigning
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
