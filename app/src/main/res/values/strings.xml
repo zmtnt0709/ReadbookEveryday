@@ -6,9 +6,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
-    <string name="menu_book_list">任务列表</string>
+    <string name="menu_book_list">读书列表</string>
     <string name="menu_read_progress">阅读进度</string>
     <string name="menu_once_a_week">每周一问</string>
+    <string name="menu_android_core">安卓内核</string>
     <string name="group_menu_other_page">其他页面</string>
     <string name="menu_save_restore">备份还原</string>
 

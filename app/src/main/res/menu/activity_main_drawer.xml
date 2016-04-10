@@ -14,6 +14,10 @@
             android:id="@+id/nav_once_a_week"
             android:icon="@android:drawable/ic_menu_week"
             android:title="@string/menu_once_a_week" />
+        <!--<item-->
+            <!--android:id="@+id/nav_android_core"-->
+            <!--android:icon="@android:drawable/ic_menu_zoom"-->
+            <!--android:title="@string/menu_android_core" />-->
     </group>
 
     <item android:title="@string/group_menu_other_page">
