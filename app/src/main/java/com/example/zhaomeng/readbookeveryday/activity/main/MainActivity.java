@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-
+        Log.d(TAG,"onCreate");
     }
 
     private void initViews() {
@@ -66,7 +66,12 @@ public class MainActivity extends AppCompatActivity
     private void initFragment() {
         Log.d(TAG, "click nav_book_list");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        bookListFragment = new BookListFragment();
+        if(currentFragment != null){
+            fragmentTransaction.hide(currentFragment);
+        }
+        if(bookListFragment == null) {
+            bookListFragment = new BookListFragment();
+        }
         fragmentTransaction.add(R.id.main_fragment, bookListFragment);
         currentFragment = bookListFragment;
         fragmentTransaction.show(bookListFragment);

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by zhaomeng on 2015/11/30.
  */
-public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = ReadProgressFragment.class.getSimpleName();
 
     private TextView hasReadTextView;
@@ -68,7 +68,7 @@ public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        if(!isRefreshing){
+        if (!isRefreshing) {
             new GetReadProgressTask().execute();
         }
     }
@@ -110,10 +110,10 @@ public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout
                 hasReadPagesString = String.valueOf(hasReadPages);
                 int currentDate = (int) (System.currentTimeMillis() / 1000 / 3600 / 24);
                 int readDate = currentDate - firstReadDate + 1;
-                if (readDate < 0)  return false;
+                if (readDate < 0) return false;
 
-                int averagePages = hasReadPages / readDate;
-                averagePagesString = String.valueOf(averagePages);
+                float averagePages = hasReadPages / (readDate * 1.0f);
+                averagePagesString = String.format("%.1f",averagePages);
                 readProgressAdapter = new ReadProgressAdapter(getActivity(), readProgressToShowList, maxReadPages);
                 return true;
             }
