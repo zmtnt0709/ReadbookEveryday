@@ -26,6 +26,11 @@ import com.example.zhaomeng.readbookeveryday.activity.save.SaveAndRestoreActivit
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String BOOK_LIST_FRAGMENT_TAG = "book_list_fragment_tag";
+    private static final String READ_PROGRESS_FRAGMENT_TAG = "read_progress_fragment_tag";
+    private static final String ONCE_A_WEEK_FRAGMENT_TAG = "once_a_week_fragment_tag";
+
     private NavigationView navigationView;
     private FloatingActionButton fab;
     private FragmentManager fragmentManager;
@@ -39,11 +44,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initViews();
-        Log.d(TAG,"onCreate");
+        initViews(savedInstanceState);
+        Log.d(TAG, "onCreate");
     }
 
-    private void initViews() {
+    private void initViews(Bundle savedInstanceState) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,19 +65,24 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentManager = getSupportFragmentManager();
-        initFragment();
+        initFragment(savedInstanceState);
     }
 
-    private void initFragment() {
+    private void initFragment(Bundle savedInstanceState) {
         Log.d(TAG, "click nav_book_list");
+        if (savedInstanceState != null) {
+            bookListFragment = (BookListFragment) fragmentManager.findFragmentByTag(BOOK_LIST_FRAGMENT_TAG);
+            readProgressFragment = (ReadProgressFragment) fragmentManager.findFragmentByTag(READ_PROGRESS_FRAGMENT_TAG);
+            onceAWeekFragment = (OnceAWeekFragment) fragmentManager.findFragmentByTag(ONCE_A_WEEK_FRAGMENT_TAG);
+        }
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(currentFragment != null){
+        if (currentFragment != null) {
             fragmentTransaction.hide(currentFragment);
         }
-        if(bookListFragment == null) {
+        if (bookListFragment == null) {
             bookListFragment = new BookListFragment();
         }
-        fragmentTransaction.add(R.id.main_fragment, bookListFragment);
+        fragmentTransaction.add(R.id.main_fragment, bookListFragment, BOOK_LIST_FRAGMENT_TAG);
         currentFragment = bookListFragment;
         fragmentTransaction.show(bookListFragment);
         fragmentTransaction.commit();
@@ -104,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "click nav_book_list");
             if (bookListFragment == null) {
                 bookListFragment = new BookListFragment();
-                fragmentTransaction.add(R.id.main_fragment, bookListFragment);
+                fragmentTransaction.add(R.id.main_fragment, bookListFragment, BOOK_LIST_FRAGMENT_TAG);
             }
 
             currentFragment = bookListFragment;
@@ -115,7 +125,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "click nav_read_progress");
             if (readProgressFragment == null) {
                 readProgressFragment = new ReadProgressFragment();
-                fragmentTransaction.add(R.id.main_fragment, readProgressFragment);
+                fragmentTransaction.add(R.id.main_fragment, readProgressFragment, READ_PROGRESS_FRAGMENT_TAG);
             }
             currentFragment = readProgressFragment;
             fragmentTransaction.show(readProgressFragment);
@@ -125,13 +135,13 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "click nav_once_a_week");
             if (onceAWeekFragment == null) {
                 onceAWeekFragment = new OnceAWeekFragment();
-                fragmentTransaction.add(R.id.main_fragment, onceAWeekFragment);
+                fragmentTransaction.add(R.id.main_fragment, onceAWeekFragment, ONCE_A_WEEK_FRAGMENT_TAG);
             }
             currentFragment = onceAWeekFragment;
             fragmentTransaction.show(onceAWeekFragment);
             fragmentTransaction.commit();
             fab.setVisibility(View.VISIBLE);
-        }  else if (id == R.id.nav_save_restore) {
+        } else if (id == R.id.nav_save_restore) {
             Intent intent = new Intent(MainActivity.this, SaveAndRestoreActivity.class);
             startActivity(intent);
         }

@@ -81,6 +81,8 @@ public class BookListAdapter extends BaseAdapter {
                     .setImageRequest(request)
                     .build();
             holder.bookPoster.setController(controller);
+        } else {
+            holder.bookPoster.setController(null);
         }
         holder.bookPoster.setOnClickListener(new View.OnClickListener() {
             @Override

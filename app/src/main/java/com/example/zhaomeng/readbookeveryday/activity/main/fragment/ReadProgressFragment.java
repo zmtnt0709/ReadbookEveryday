@@ -113,7 +113,7 @@ public class ReadProgressFragment extends Fragment implements SwipeRefreshLayout
                 if (readDate < 0) return false;
 
                 float averagePages = hasReadPages / (readDate * 1.0f);
-                averagePagesString = String.format("%.1f",averagePages);
+                averagePagesString = String.format("%.2f",averagePages);
                 readProgressAdapter = new ReadProgressAdapter(getActivity(), readProgressToShowList, maxReadPages);
                 return true;
             }

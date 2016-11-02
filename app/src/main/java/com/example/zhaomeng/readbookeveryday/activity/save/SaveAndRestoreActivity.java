@@ -77,6 +77,8 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_RESTORE_FILE_PATH) {
+            if (data == null || data.getData() == null) return;
+
             restoreData(data.getData().getPath());
         }
     }
