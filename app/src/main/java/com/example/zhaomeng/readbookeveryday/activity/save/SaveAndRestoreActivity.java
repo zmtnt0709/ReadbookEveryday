@@ -34,8 +34,8 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
 
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        saveButton = (Button) findViewById(R.id.save_button);
-        restoreButton = (Button) findViewById(R.id.restore_button);
+        saveButton = (TextView) findViewById(R.id.save_button);
+        restoreButton = (TextView) findViewById(R.id.restore_button);
     }
 
     private void initEvent() {
@@ -63,17 +63,6 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
         });
     }
 
-    private void saveData() {
-        String savePath = fileUtil.getSavePath();
-        String saveFileName = fileUtil.getSaveFileName();
-        boolean success = fileUtil.saveData(this, savePath, saveFileName);
-        if (success) {
-            Toast.makeText(this, this.getResources().getString(R.string.save_success) + savePath + saveFileName, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, this.getResources().getString(R.string.save_failed), Toast.LENGTH_LONG).show();
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_RESTORE_FILE_PATH) {
@@ -81,6 +70,27 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
 
             restoreData(data.getData().getPath());
         }
+    }
+
+    private void saveData() {
+        String savePath = fileUtil.getSavePath();
+        //保存数据库信息
+        boolean success = fileUtil.saveData(this, savePath);
+        if (!success) {
+            Toast.makeText(this, this.getResources().getString(R.string.save_failed), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //保存封面图片
+        success = fileUtil.saveImage(this, savePath);
+        if (!success) {
+            Toast.makeText(this, this.getResources().getString(R.string.save_failed), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //压缩文件夹
+        success = fileUtil.zipFile(this, savePath);
+
     }
 
     private void restoreData(String filePath) {

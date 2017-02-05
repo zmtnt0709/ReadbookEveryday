@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.ReadProgressDto;
@@ -15,10 +16,12 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +34,8 @@ import java.util.List;
 public class FileUtil {
     private static String TAG = FileUtil.class.getSimpleName();
     private static FileUtil instance;
-    private static String SAVE_PATH = "/ReadBookEveryDay/save/";
+    private static String SAVE_PATH = "/ReadBookEveryDay/save_";
+    private static String FILE_NAME = "SaveFile.bak";
     private static String NEW_LINE = "\n";
     private static String BOOK_DTO = "BookDto";
     private static String READ_PROGRESS_DTO = "ReadProgressDto";
@@ -104,8 +108,7 @@ public class FileUtil {
         if (externalFile == null) return null;
 
         newImagePath = externalFile.getAbsolutePath();
-        int index = oldImagePath.lastIndexOf(File.separator);
-        String fileName = oldImagePath.substring(index);
+        String fileName = getImageFileName(oldImagePath);
         newImagePath = newImagePath + fileName;
         return newImagePath;
     }
@@ -124,22 +127,18 @@ public class FileUtil {
 
     public String getSavePath() {
         File sdCardFile = Environment.getExternalStorageDirectory();
-        return sdCardFile.getPath() + SAVE_PATH;
-    }
-
-    public String getSaveFileName() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
         String date = sdf.format(new java.util.Date());
-        return "saveFile_" + date + ".bak";
+        return sdCardFile.getPath() + SAVE_PATH + date + File.separator;
     }
 
-    public boolean saveData(Context context, String savePath, String fileName) {
+    public boolean saveData(Context context, String savePath) {
         File saveDir = new File(savePath);
         if (!saveDir.exists()) {
             if (!saveDir.mkdirs())
                 return false;
         }
-        File saveFile = new File(savePath + fileName);
+        File saveFile = new File(savePath + FILE_NAME);
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(saveFile);
@@ -152,6 +151,53 @@ public class FileUtil {
             close(fileWriter);
         }
         return true;
+    }
+
+    public boolean saveImage(Context context, String savePath) {
+        File saveDir = new File(savePath);
+        if (!saveDir.exists()) {
+            if (!saveDir.mkdirs())
+                return false;
+        }
+        BookUtil bookUtil = BookUtil.getInstance(context.getApplicationContext());
+        List<BookDto> bookList = bookUtil.getBookDao().getAllBookList();
+
+        File oldFile;
+        for (BookDto bookDto : bookList) {
+            oldFile = new File(bookDto.getImagePath());
+            if (!oldFile.exists()) continue;
+
+            String fileName = getImageFileName(bookDto.getImagePath());
+            if (TextUtils.isEmpty(fileName)) return false;
+
+            if (oldFile.exists()) {
+                InputStream is = null;
+                FileOutputStream fs = null;
+                try {
+                    is = new FileInputStream(oldFile);
+                    fs = new FileOutputStream(savePath + fileName);
+                    byte[] buffer = new byte[2048];
+                    int length;
+                    while ((length = is.read(buffer)) != -1) {
+                        fs.write(buffer, 0, length);
+                    }
+                } catch (Exception e) {
+                    return false;
+                } finally {
+                    close(is);
+                    close(fs);
+                }
+            }
+        }
+        return true;
+    }
+
+
+    public boolean zipFile(Context context, String savePath) {
+
+        String zipPath = /ReadBookEveryDay/save_
+
+        return false;
     }
 
     private void saveBookDto(Context context, FileWriter fileWriter) throws IOException {
@@ -178,6 +224,12 @@ public class FileUtil {
         }
     }
 
+    private String getImageFileName(String imagePath) {
+        if (TextUtils.isEmpty(imagePath)) return null;
+
+        String[] splits = imagePath.split(File.separator);
+        return splits[splits.length - 1];
+    }
 
     public boolean restoreData(Context context, String filePath) {
         int index = filePath.indexOf(":");
