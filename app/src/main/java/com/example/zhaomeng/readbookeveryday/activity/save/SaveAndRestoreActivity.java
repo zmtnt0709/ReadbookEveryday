@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zhaomeng.readbookeveryday.R;
@@ -16,8 +16,8 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
     private static int REQUEST_CODE_RESTORE_FILE_PATH = 1;
     private FileUtil fileUtil;
     private Toolbar toolbar;
-    private Button saveButton;
-    private Button restoreButton;
+    private TextView saveButton;
+    private TextView restoreButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,8 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
 
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        saveButton = (Button) findViewById(R.id.save_button);
-        restoreButton = (Button) findViewById(R.id.restore_button);
+        saveButton = (TextView) findViewById(R.id.save_button);
+        restoreButton = (TextView) findViewById(R.id.restore_button);
     }
 
     private void initEvent() {
