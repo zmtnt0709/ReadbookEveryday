@@ -23,6 +23,9 @@ import com.example.zhaomeng.readbookeveryday.activity.main.fragment.OnceAWeekFra
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.ReadProgressFragment;
 import com.example.zhaomeng.readbookeveryday.activity.save.SaveAndRestoreActivity;
 
+/**
+ * 主页面
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
