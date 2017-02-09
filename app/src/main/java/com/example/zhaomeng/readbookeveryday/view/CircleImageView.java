@@ -9,6 +9,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -18,6 +19,7 @@ import android.widget.ImageView;
  */
 
 public class CircleImageView extends ImageView {
+    private static String TAG = CircleImageView.class.getSimpleName();
 
     private Paint paint;
     private Canvas circleCanvas;
@@ -44,7 +46,7 @@ public class CircleImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
+        Log.d(TAG, "onDraw");
         Drawable drawable = getDrawable();
         if (null != drawable) {
             drawCirclePicture(drawable, canvas);
