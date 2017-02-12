@@ -18,5 +18,8 @@
 
     <color name="book_list_divider">#909090</color>
 
+    <color name="button_normal">#d24646</color>
+    <color name="button_pressed">#99d24646</color>
+
 
 </resources>

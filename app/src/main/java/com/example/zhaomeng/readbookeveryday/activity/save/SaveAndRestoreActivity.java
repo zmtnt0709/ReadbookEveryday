@@ -5,19 +5,18 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.util.FileUtil;
+import com.example.zhaomeng.readbookeveryday.view.RemoteControlButton;
 
 public class SaveAndRestoreActivity extends AppCompatActivity {
     private static String TAG = SaveAndRestoreActivity.class.getSimpleName();
     private static int REQUEST_CODE_RESTORE_FILE_PATH = 1;
     private FileUtil fileUtil;
     private Toolbar toolbar;
-    private TextView saveButton;
-    private TextView restoreButton;
+    private RemoteControlButton menuButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,7 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
 
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        saveButton = (TextView) findViewById(R.id.save_button);
-        restoreButton = (TextView) findViewById(R.id.restore_button);
+        menuButton = (RemoteControlButton) findViewById(R.id.menu_button);
     }
 
     private void initEvent() {
@@ -46,19 +44,32 @@ public class SaveAndRestoreActivity extends AppCompatActivity {
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        menuButton.setMenuClickListener(new RemoteControlButton.OnMenuClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onCenterCliched() {
+
+            }
+
+            @Override
+            public void onTopCliched() {
                 saveData();
             }
-        });
 
-        restoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onRightCliched() {
+
+            }
+
+            @Override
+            public void onBottomCliched() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
                 startActivityForResult(intent, REQUEST_CODE_RESTORE_FILE_PATH);
+            }
+
+            @Override
+            public void onLeftCliched() {
+
             }
         });
     }
