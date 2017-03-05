@@ -1,7 +1,6 @@
 package com.example.zhaomeng.readbookeveryday.activity.addbook;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -24,11 +24,7 @@ import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.module.PageRange;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
 import com.example.zhaomeng.readbookeveryday.util.FileUtil;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +41,7 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText bookTitle;
     private TextView hasReadPage;
     private TextView totalPage;
-    private SimpleDraweeView bookPoster;
+    private ImageView bookPoster;
     private ListView pageRangeListView;
     private PageRangeAdapter pageRangeAdapter;
 
@@ -56,7 +52,6 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(this);
         setContentView(R.layout.activity_add_task);
         initData();
         initView();
@@ -66,7 +61,7 @@ public class AddBookActivity extends AppCompatActivity {
     private void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         addPagesTask = (TextView) findViewById(R.id.add_pages);
-        bookPoster = (SimpleDraweeView) findViewById(R.id.book_poster);
+        bookPoster = (ImageView) findViewById(R.id.book_poster);
         bookTitle = (EditText) findViewById(R.id.book_title);
         hasReadPage = (TextView) findViewById(R.id.has_read_page);
         totalPage = (TextView) findViewById(R.id.total_page);
@@ -129,12 +124,7 @@ public class AddBookActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PICK_IMAGE && data != null && data.getData() != null) {
             imagePath = FileUtil.getInstance().saveImage(this, data.getData());
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse("file://" + imagePath))
-                    .build();
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setImageRequest(request)
-                    .build();
-            bookPoster.setController(controller);
+            Picasso.with(this).load(imagePath).into(bookPoster);
         }
     }
 

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -21,13 +22,15 @@ import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
 import com.example.zhaomeng.readbookeveryday.util.FileUtil;
 import com.example.zhaomeng.readbookeveryday.widget.ConfirmPopupWindow;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
  * Created by zhaomeng on 2015/10/19.
  */
-public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,AbsListView.OnScrollListener{
     private static final String TAG = BookListFragment.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_IMAGE = 1;
     private SwipeRefreshLayout swipeRefresh;
@@ -50,6 +53,7 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
         bookListView = (ListView) rootView.findViewById(R.id.book_list_view);
         bookListView.setOnItemClickListener(this);
         bookListView.setOnItemLongClickListener(this);
+        bookListView.setOnScrollListener(this);
         return rootView;
     }
 
@@ -101,6 +105,21 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 bookListAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        Picasso picasso = Picasso.with(getContext());
+        if(scrollState == SCROLL_STATE_IDLE || scrollState == SCROLL_STATE_TOUCH_SCROLL){
+            picasso.pauseTag(BookListAdapter.BOOK_LIST_IMAGE);
+        }else {
+            picasso.resumeTag(BookListAdapter.BOOK_LIST_IMAGE);
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
     }
 
     private class DeleteConfirm extends ConfirmPopupWindow {

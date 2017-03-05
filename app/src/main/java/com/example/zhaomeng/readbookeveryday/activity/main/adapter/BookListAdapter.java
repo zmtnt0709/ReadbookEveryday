@@ -12,11 +12,7 @@ import android.widget.TextView;
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.BookListFragment;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +22,8 @@ import java.util.List;
  * Created by zhaomeng on 2015/10/20.
  */
 public class BookListAdapter extends BaseAdapter {
+    public static final String BOOK_LIST_IMAGE = "book_list_image";
+
     private List<BookDto> bookDtoList;
     private Context context;
     private LayoutInflater inflater;
@@ -60,7 +58,7 @@ public class BookListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.adapter_book_list, viewGroup, false);
             holder = new ViewHolder();
             holder.title = (TextView) view.findViewById(R.id.book_title);
-            holder.bookPoster = (SimpleDraweeView) view.findViewById(R.id.book_poster);
+            holder.bookPoster = (ImageView) view.findViewById(R.id.book_poster);
             holder.progress = (TextView) view.findViewById(R.id.progress);
             holder.createTime = (TextView) view.findViewById(R.id.create_time);
             holder.updateTime = (TextView) view.findViewById(R.id.last_update_time);
@@ -73,16 +71,11 @@ public class BookListAdapter extends BaseAdapter {
         holder.title.setText(bookDto.getTitle());
         if (bookDto.getImagePath() != null) {
             Uri uri = Uri.parse("file://" + bookDto.getImagePath());
-            ImageRequest request = ImageRequestBuilder
-                    .newBuilderWithSource(uri)
-                    .setProgressiveRenderingEnabled(true)
-                    .build();
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setImageRequest(request)
-                    .build();
-            holder.bookPoster.setController(controller);
+            Picasso.with(context).load(uri).tag(BOOK_LIST_IMAGE).into(holder.bookPoster);
+            holder.bookPoster.setScaleType(ImageView.ScaleType.FIT_XY);
         } else {
-            holder.bookPoster.setController(null);
+            Picasso.with(context).load(R.mipmap.camera).into(holder.bookPoster);
+            holder.bookPoster.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
         holder.bookPoster.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +101,7 @@ public class BookListAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView title;
-        SimpleDraweeView bookPoster;
+        ImageView bookPoster;
         TextView progress;
         TextView createTime;
         TextView updateTime;

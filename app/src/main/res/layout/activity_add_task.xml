@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme.AppBarOverlay">
@@ -29,18 +29,15 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <ImageView
                 android:id="@+id/book_poster"
                 android:layout_width="84dp"
                 android:layout_height="111.6dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:scaleType="fitXY"
-                fresco:actualImageScaleType="fitXY"
-                fresco:backgroundImage="@color/add_book_poster_background"
-                fresco:failureImage="@android:drawable/ic_menu_camera"
-                fresco:placeholderImage="@android:drawable/ic_menu_camera"/>
+                android:src="@mipmap/camera"
+                android:scaleType="center" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"

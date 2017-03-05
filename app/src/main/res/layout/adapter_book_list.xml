@@ -4,20 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingLeft="10dp">
+    android:paddingTop="10dp">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <ImageView
         android:id="@+id/book_poster"
         android:layout_width="70dp"
         android:layout_height="93dp"
-        android:layout_alignParentLeft="true"
-        android:scaleType="fitXY"
-        fresco:actualImageScaleType="fitXY"
-        fresco:backgroundImage="@color/book_list_poster_background"
-        fresco:failureImage="@android:drawable/ic_menu_camera"
-        fresco:placeholderImage="@android:drawable/ic_menu_camera" />
+        android:layout_alignParentLeft="true"/>
 
     <RelativeLayout
         android:id="@+id/book_body_layout"
@@ -84,12 +79,12 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:src="@drawable/complete"/>
+        android:src="@drawable/complete" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginTop="10dp"
         android:layout_below="@id/book_poster"
-        android:background="@color/book_list_divider"/>
+        android:layout_marginTop="10dp"
+        android:background="@color/book_list_divider" />
 </RelativeLayout>
