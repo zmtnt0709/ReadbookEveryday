@@ -19,13 +19,11 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.module.PageRange;
 import com.example.zhaomeng.readbookeveryday.util.BookUtil;
 import com.example.zhaomeng.readbookeveryday.util.FileUtil;
 import com.squareup.picasso.Picasso;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -124,6 +122,7 @@ public class AddBookActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PICK_IMAGE && data != null && data.getData() != null) {
             imagePath = FileUtil.getInstance().saveImage(this, data.getData());
+            imagePath = FileUtil.FILE_SCHEME + imagePath;
             Picasso.with(this).load(imagePath).into(bookPoster);
         }
     }

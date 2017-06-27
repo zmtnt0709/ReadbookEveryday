@@ -1,19 +1,18 @@
 package com.example.zhaomeng.readbookeveryday.activity.main.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.zhaomeng.readbookeveryday.R;
 import com.example.zhaomeng.readbookeveryday.activity.main.fragment.BookListFragment;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
+import com.example.zhaomeng.readbookeveryday.util.BookUtil;
+import com.example.zhaomeng.readbookeveryday.util.FileUtil;
 import com.squareup.picasso.Picasso;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -70,8 +69,11 @@ public class BookListAdapter extends BaseAdapter {
         final BookDto bookDto = bookDtoList.get(i);
         holder.title.setText(bookDto.getTitle());
         if (bookDto.getImagePath() != null) {
-            Uri uri = Uri.parse("file://" + bookDto.getImagePath());
-            Picasso.with(context).load(uri).tag(BOOK_LIST_IMAGE).into(holder.bookPoster);
+            if(!bookDto.getImagePath().startsWith(FileUtil.FILE_SCHEME)){
+                bookDto.setImagePath(FileUtil.FILE_SCHEME +bookDto.getImagePath());
+                BookUtil.getInstance(context).createOrUpdateBookDto(bookDto);
+            }
+            Picasso.with(context).load(bookDto.getImagePath()).tag(BOOK_LIST_IMAGE).into(holder.bookPoster);
             holder.bookPoster.setScaleType(ImageView.ScaleType.FIT_XY);
         } else {
             Picasso.with(context).load(R.mipmap.camera).into(holder.bookPoster);

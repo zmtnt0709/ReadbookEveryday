@@ -35,6 +35,7 @@ public class FileUtil {
     private static String NEW_LINE = "\n";
     private static String BOOK_DTO = "BookDto";
     private static String READ_PROGRESS_DTO = "ReadProgressDto";
+    public static String FILE_SCHEME = "file://";
 
     public static FileUtil getInstance() {
         if (instance == null) {
@@ -111,6 +112,10 @@ public class FileUtil {
     }
 
     public String getAbsolutePathByUri(Context context, Uri contentUri) {
+        //如果返回的就是Path直接返回
+        if(contentUri != null&& new File(contentUri.getPath()).exists()){
+          return contentUri.getPath();
+        }
         String res = null;
         String[] project = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(contentUri, project, null, null, null);
