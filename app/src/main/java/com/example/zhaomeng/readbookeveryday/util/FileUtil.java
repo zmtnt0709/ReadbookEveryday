@@ -7,10 +7,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.BookDto;
 import com.example.zhaomeng.readbookeveryday.sqlite.dto.ReadProgressDto;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -189,6 +187,10 @@ public class FileUtil {
         if (index > 0) {
             String subString = filePath.substring(index + 1);
             filePath = Environment.getExternalStorageDirectory().getPath() + File.separator + subString;
+        }
+        //适配最新小米系统
+        if(filePath.contains("/external_files")){
+            filePath = filePath.replace("/external_files", Environment.getExternalStorageDirectory().getPath());
         }
         File restoreFile = new File(filePath);
         if (!restoreFile.exists()) return false;

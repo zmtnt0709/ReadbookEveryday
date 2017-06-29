@@ -158,7 +158,11 @@ public class BookListFragment extends Fragment implements SwipeRefreshLayout.OnR
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            return BookUtil.getInstance(getActivity().getApplicationContext()).getAllBookListToShow();
+            if(getActivity() != null ) {
+                return BookUtil.getInstance(getActivity().getApplicationContext()).getAllBookListToShow();
+            }else {
+                return null;
+            }
         }
 
         @Override
