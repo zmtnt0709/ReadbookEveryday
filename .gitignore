@@ -1,5 +1,6 @@
 .gradle
 .idea
+*.iml
 /ReadbookEveryday.iml
 /local.properties
 .DS_Store
