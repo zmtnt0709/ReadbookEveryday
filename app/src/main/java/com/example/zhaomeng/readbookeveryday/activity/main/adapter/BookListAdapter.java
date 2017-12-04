@@ -35,6 +35,11 @@ public class BookListAdapter extends BaseAdapter {
         this.inflater = LayoutInflater.from(context);
     }
 
+    public void setData(List<BookDto> bookDtoList) {
+        this.bookDtoList = bookDtoList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return bookDtoList.size();
